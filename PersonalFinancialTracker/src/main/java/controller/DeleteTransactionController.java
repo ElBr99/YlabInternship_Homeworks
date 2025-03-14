@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class DeleteTransactionController implements ControllerService {
@@ -18,17 +17,17 @@ public class DeleteTransactionController implements ControllerService {
     public void execute(Scanner scanner) {
 
         System.out.println("Введите номер транзакции, которую хотите удалить");
-        String uuid = scanner.nextLine();
+        int id = scanner.nextInt();
 
-        transactionService.deleteTransaction(UUID.fromString(uuid));
+        transactionService.deleteTransaction(id);
 
     }
 
     @Override
     public void execute(PrintWriter out, BufferedReader in) throws IOException {
         out.println("Введите номер транзакции, которую хотите удалить");
-        String uuid = in.readLine();
+        int id = in.read();
 
-        transactionService.deleteTransaction(UUID.fromString(uuid));
+        transactionService.deleteTransaction(id);
     }
 }

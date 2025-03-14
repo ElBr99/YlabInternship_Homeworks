@@ -3,32 +3,40 @@ package utils;
 import liquibase.Liquibase;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.DatabaseException;
-import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import lombok.Cleanup;
+import lombok.SneakyThrows;
 
 import java.sql.Connection;
 
 public final class LiquibaseUtils {
 
     private static final String LIQUIBASE_CHANGELOG = "db.liquibase.changelog";
+    private static final String LIQUIBASE_SCHEMA = "db.liquibase.defaultSchema";
+    private static final String LIQUIBASE_MAIN_SCHEMA = "db.liquibase.mainSchema";
 
 
+    @SneakyThrows
     public static Liquibase initLiquibase(Connection connection) {
-        try {
-            return new Liquibase(LIQUIBASE_CHANGELOG,
-                    new ClassLoaderResourceAccessor(),
-                    DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection)));
-        } catch (DatabaseException ex) {
-            throw new RuntimeException(ex);
-        }
+        var database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+
+        database.setLiquibaseSchemaName(PropertiesUtils.get(LIQUIBASE_SCHEMA));
+        database.setDefaultSchemaName(PropertiesUtils.get(LIQUIBASE_MAIN_SCHEMA));
+        //database.setDefaultCatalogName(PropertiesUtils.get(LIQUIBASE_MAIN_SCHEMA));
+       // database.getDefaultDriver("org.postgresql.Driver");
+
+        return new Liquibase(
+                PropertiesUtils.get(LIQUIBASE_CHANGELOG),
+                new ClassLoaderResourceAccessor(),
+                database
+        );
     }
 
-    public static void launchMigrations(Connection connection) {
-        try {
-            initLiquibase(connection).update();
-        } catch (LiquibaseException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows
+    public static void launchMigrations() {
+        @Cleanup Connection connection = ConnectionManager.get();
+        var liquibase = initLiquibase(connection);
+        liquibase.dropAll();
+        liquibase.update("");
     }
 }

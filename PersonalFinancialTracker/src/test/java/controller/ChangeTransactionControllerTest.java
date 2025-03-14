@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import service.TransactionService;
 
 import java.math.BigDecimal;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -18,7 +19,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ChangeTransactionControllerTest {
 
-    private final UUID testUuid = UUID.randomUUID();
+
+    private final int testId = new Random().nextInt(10)+1;
     private final BigDecimal testSum = BigDecimal.valueOf(100);
     private final String testCategory = "Test Category";
     private final String testDescription = "Test Description";
@@ -31,12 +33,12 @@ public class ChangeTransactionControllerTest {
     void execute_MockedScanner_ValidInput_ChangesTransactionInfo() {
         Scanner scanner = mock(Scanner.class);
 
-        when(scanner.nextLine()).thenReturn(testUuid.toString(), testCategory, testDescription);
+        when(scanner.nextLine()).thenReturn(String.valueOf(testId), testCategory, testDescription);
         when(scanner.nextBigDecimal()).thenReturn(testSum);
 
         changeTransactionController.execute(scanner);
 
-        verify(transactionService).changeTransactionInfo(eq(testUuid), argThat(changeTransInfoDto ->
+        verify(transactionService).changeTransactionInfo(eq(testId), argThat(changeTransInfoDto ->
                 changeTransInfoDto.getSum().equals(testSum) &&
                         changeTransInfoDto.getCategory().equals(testCategory) &&
                         changeTransInfoDto.getDescription().equals(testDescription)

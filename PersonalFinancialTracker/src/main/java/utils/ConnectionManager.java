@@ -1,5 +1,7 @@
 package utils;
 
+import lombok.SneakyThrows;
+
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -53,17 +55,15 @@ public final class ConnectionManager {
     }
 
 
+    @SneakyThrows
     private static Connection open() {
-        try {
-            return DriverManager.getConnection(
-                    PropertiesUtils.get(URL_KEY),
-                    PropertiesUtils.get(USERNAME_KEY),
-                    PropertiesUtils.get(PASSWORD_KEY)
-            );
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return DriverManager.getConnection(
+                PropertiesUtils.get(URL_KEY),
+                PropertiesUtils.get(USERNAME_KEY),
+                PropertiesUtils.get(PASSWORD_KEY)
+        );
     }
+
 
     public static void loadDriver() {
         try {

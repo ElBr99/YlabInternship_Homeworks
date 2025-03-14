@@ -2,36 +2,15 @@ package repository;
 
 import model.Role;
 import model.User;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class UserRepositoryImplTest {
+public class UserRepositoryImplTest extends AbstractIntegrationTest {
 
     private final UserRepositoryImpl userRepository = new UserRepositoryImpl();
-    private final Map<String, User> usersMap = getUsersMap();
-
-    @AfterEach
-    void tearDown() throws Exception {
-        usersMap.clear();
-        User admin = new User("Admin", "admin@mail.ru", "admin", Role.ADMIN, false);
-        usersMap.put(admin.getEmail(), admin);
-    }
-
-    private Map<String, User> getUsersMap() {
-        try {
-            Field field = UserRepositoryImpl.class.getDeclaredField("usersMap");
-            field.setAccessible(true);
-            return (Map<String, User>) field.get(null);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("Could not access usersMap", e);
-        }
-    }
 
 
     @Test
@@ -40,8 +19,7 @@ public class UserRepositoryImplTest {
 
         userRepository.save(newUser);
 
-        assertTrue(usersMap.containsKey(newUser.getEmail()));
-        assertEquals(newUser, usersMap.get(newUser.getEmail()));
+        assertEquals(newUser, userRepository.findByEmail(newUser.getEmail()).get());
     }
 
     @Test
@@ -50,18 +28,16 @@ public class UserRepositoryImplTest {
         User initialUser = createUser("Initial User", existingEmail, "initialPassword", Role.USER, false);
         User newUser = createUser("New User", existingEmail, "newPassword", Role.ADMIN, true);
 
-        usersMap.put(existingEmail, initialUser);
-
         userRepository.save(newUser);
+        assertThrows(RuntimeException.class,()->userRepository.save(newUser));
 
-        assertEquals(initialUser, usersMap.get(existingEmail));
     }
 
     @Test
     void findByEmail_UserExists_ReturnsUser() {
         String existingEmail = "test@example.com";
         User user = createUser("Test User", existingEmail, "password", Role.USER, false);
-        usersMap.put(existingEmail, user);
+        userRepository.save(user);
 
         Optional<User> foundUser = userRepository.findByEmail(existingEmail);
 
@@ -82,34 +58,33 @@ public class UserRepositoryImplTest {
     void update_ExistingUser_UpdatesUserInMap() {
         String existingEmail = "test@example.com";
         User initialUser = createUser("Initial User", existingEmail, "initialPassword", Role.USER, false);
-        usersMap.put(existingEmail, initialUser);
+        userRepository.update(initialUser);
 
         User updatedUser = createUser("Updated User", existingEmail, "updatedPassword", Role.ADMIN, true);
 
         userRepository.update(updatedUser);
 
-        assertEquals(updatedUser, usersMap.get(existingEmail));
+        assertEquals(updatedUser, userRepository.findByEmail(existingEmail).get());
     }
 
     @Test
     void delete_ExistingUser_RemovesUserFromMap() {
         String existingEmail = "test@example.com";
         User userToDelete = createUser("Test User", existingEmail, "password", Role.USER, false);
-        usersMap.put(existingEmail, userToDelete);
+        userRepository.save(userToDelete);
 
         userRepository.delete(userToDelete);
 
-        assertFalse(usersMap.containsKey(existingEmail));
+        assertNull(userRepository.findByEmail(existingEmail));
     }
 
     @Test
     void delete_NonExistingUser_DoesNothing() {
         User nonExistingUser = createUser("Non Existent", "nonexistent@example.com", "password", Role.USER, false);
-        int initialSize = usersMap.size();
 
         userRepository.delete(nonExistingUser);
 
-        assertEquals(initialSize, usersMap.size());
+        assertThrows(RuntimeException.class, ()->userRepository.delete(nonExistingUser));
     }
 
     private User createUser(String name, String email, String password, Role role, boolean blocked) {

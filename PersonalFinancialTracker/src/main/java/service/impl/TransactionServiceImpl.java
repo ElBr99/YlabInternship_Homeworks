@@ -25,15 +25,15 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Transaction addTransaction(CreateTransactionDto createTransactionDto) {
-        Transaction transaction = new Transaction(
-                UUID.randomUUID(),
-                SecurityContext.getCurrentUserEmail(),
-                createTransactionDto.getTransactionType(),
-                createTransactionDto.getSum(),
-                OffsetDateTime.now(),
-                createTransactionDto.getDescription(),
-                createTransactionDto.getCategory()
-        );
+
+        Transaction transaction = Transaction.builder()
+                .userEmail(SecurityContext.getCurrentUserEmail())
+                .transactionType(createTransactionDto.getTransactionType())
+                .sum(createTransactionDto.getSum())
+                .dateTime(OffsetDateTime.now())
+                .description(createTransactionDto.getDescription())
+                .category(createTransactionDto.getCategory())
+                .build();
 
         transactionRepository.save(transaction);
         transactionListeners.forEach(listener -> listener.onCreate(transaction));
@@ -41,8 +41,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void changeTransactionInfo(UUID uuid, ChangeTransInfoDto changeTransInfoDto) {
-        Transaction transaction = transactionRepository.findById(uuid)
+    public void changeTransactionInfo(int id, ChangeTransInfoDto changeTransInfoDto) {
+        Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new TransactionNotFound("Такой транзакции не найдено"));
 
         if (changeTransInfoDto.getSum() != null) {
@@ -61,11 +61,11 @@ public class TransactionServiceImpl implements TransactionService {
 
 
     @Override
-    public void deleteTransaction(UUID uuid) {
-        Transaction transaction = transactionRepository.findById(uuid)
+    public void deleteTransaction(int id) {
+        Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new TransactionNotFound("Такой транзакции не найдено"));
 
-        transactionRepository.delete(uuid);
+        transactionRepository.delete(id);
         deleteTransactionListeners.forEach(listener -> listener.onDelete(transaction));
     }
 

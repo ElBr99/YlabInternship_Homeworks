@@ -71,7 +71,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     public void delete(User user) {
         try (var connection = ConnectionManager.get();
-             var preparedStatement = connection.prepareStatement(UPDATE_INFO)) {
+             var preparedStatement = connection.prepareStatement(DELETE_USER)) {
             preparedStatement.executeUpdate();
         } catch (SQLException exception) {
             throw new RuntimeException(exception);

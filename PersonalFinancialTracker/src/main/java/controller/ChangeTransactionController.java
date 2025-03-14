@@ -19,7 +19,7 @@ public class ChangeTransactionController implements ControllerService {
     @Override
     public void execute(Scanner scanner) {
         System.out.println("Введите номер транзакции, которую хотите изменить");
-        String uuid = scanner.nextLine();
+        int id = scanner.nextInt();
         System.out.println("Введите сумму транзакции, если хотите ее изменить. Иначе пропустить строку, нажав enter");
         BigDecimal sum = scanner.nextBigDecimal();
         System.out.println("Введите категорию, если хотите ее изменить. Иначе пропустить строку, нажав enter");
@@ -33,13 +33,13 @@ public class ChangeTransactionController implements ControllerService {
                 description.isBlank() ? null : description
         );
 
-        transactionService.changeTransactionInfo(UUID.fromString(uuid), changeTransInfoDto);
+        transactionService.changeTransactionInfo(id, changeTransInfoDto);
     }
 
     @Override
     public void execute(PrintWriter out, BufferedReader in) throws IOException {
         out.println("Введите номер транзакции, которую хотите изменить");
-        String uuid = in.readLine();
+        int id = in.read();
         out.println("Введите сумму транзакции, если хотите ее изменить. Иначе пропустить строку, нажав enter");
         BigDecimal sum = new BigDecimal(in.readLine());
         out.println("Введите категорию, если хотите ее изменить. Иначе пропустить строку, нажав enter");
@@ -48,6 +48,6 @@ public class ChangeTransactionController implements ControllerService {
         String description = in.readLine();
 
         ChangeTransInfoDto changeTransInfoDto = new ChangeTransInfoDto(sum, category, description);
-        transactionService.changeTransactionInfo(UUID.fromString(uuid), changeTransInfoDto);
+        transactionService.changeTransactionInfo(id, changeTransInfoDto);
     }
 }

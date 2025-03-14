@@ -18,12 +18,13 @@ public class GoalServiceImpl implements GoalService {
 
     @Override
     public void createGoal(CreateGoalDto createGoalDto) {
-        Goal goal = new Goal(
-                SecurityContext.getCurrentUserEmail(),
-                createGoalDto.getGoal(),
-                createGoalDto.getTarget(),
-                BigDecimal.ZERO
-        );
+
+        Goal goal = Goal.builder()
+                .userEmail(SecurityContext.getCurrentUserEmail())
+                .goal(createGoalDto.getGoal())
+                .target(createGoalDto.getTarget())
+                .current(BigDecimal.ZERO)
+                .build();
 
         goalRepository.createGoal(goal);
     }

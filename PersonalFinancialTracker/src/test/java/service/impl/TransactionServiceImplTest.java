@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.testcontainers.ext.ScriptUtils;
 import repository.TransactionRepository;
 import utils.SecurityContext;
 
@@ -22,7 +23,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -44,7 +45,6 @@ public class TransactionServiceImplTest {
     @Test
     void addTransaction_ValidDto_SavesTransactionAndNotifiesListeners() {
         CreateTransactionDto createTransactionDto = createTransactionDto(TransactionType.EXPENDITURE, BigDecimal.valueOf(100), "Groceries", "Description");
-
         try (MockedStatic<SecurityContext> mockedSecurityContext = mockStatic(SecurityContext.class)) {
             mockedSecurityContext.when(SecurityContext::getCurrentUserEmail).thenReturn(userEmail);
 
@@ -63,15 +63,17 @@ public class TransactionServiceImplTest {
 
     @Test
     void changeTransactionInfo_TransactionExists_UpdatesTransaction() {
-        UUID transactionUuid = UUID.randomUUID();
-        ChangeTransInfoDto changeTransInfoDto = createChangeTransInfoDto(BigDecimal.valueOf(200), "NewCategory", "NewDescription");
-        Transaction existingTransaction = createTransaction(transactionUuid, userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries");
-        when(transactionRepository.findById(transactionUuid)).thenReturn(Optional.of(existingTransaction));
 
-        transactionService.changeTransactionInfo(transactionUuid, changeTransInfoDto);
+        //начала править транзакции айди
+        int transactionId = new Random().nextInt(10) + 1;
+        ChangeTransInfoDto changeTransInfoDto = createChangeTransInfoDto(BigDecimal.valueOf(200), "NewCategory", "NewDescription");
+        Transaction existingTransaction = createTransaction(transactionId, userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries");
+        when(transactionRepository.findById(transactionId)).thenReturn(Optional.of(existingTransaction));
+
+        transactionService.changeTransactionInfo(transactionId, changeTransInfoDto);
 
         verify(transactionRepository).update(argThat(transaction ->
-                transaction.getUuid().equals(transactionUuid) &&
+                transaction.getId() == (transactionId) &&
                         transaction.getSum().equals(BigDecimal.valueOf(200)) &&
                         transaction.getCategory().equals("NewCategory") &&
                         transaction.getDescription().equals("NewDescription")
@@ -80,41 +82,42 @@ public class TransactionServiceImplTest {
 
     @Test
     void changeTransactionInfo_TransactionNotFound_ThrowsTransactionNotFound() {
-        UUID transactionUuid = UUID.randomUUID();
+        int transactionId = new Random().nextInt(10) + 1;
         ChangeTransInfoDto changeTransInfoDto = createChangeTransInfoDto(BigDecimal.valueOf(200), "NewCategory", "NewDescription");
-        when(transactionRepository.findById(transactionUuid)).thenReturn(Optional.empty());
+        when(transactionRepository.findById(transactionId)).thenReturn(Optional.empty());
 
-        assertThrows(TransactionNotFound.class, () -> transactionService.changeTransactionInfo(transactionUuid, changeTransInfoDto));
+        assertThrows(TransactionNotFound.class, () -> transactionService.changeTransactionInfo(transactionId, changeTransInfoDto));
         verify(transactionRepository, never()).update(any());
     }
 
     @Test
     void deleteTransaction_TransactionExists_DeletesTransactionAndNotifiesListeners() {
-        UUID transactionUuid = UUID.randomUUID();
-        Transaction existingTransaction = createTransaction(transactionUuid, userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries");
+        int transactionId = new Random().nextInt(10) + 1;
+        Transaction existingTransaction = createTransaction(transactionId, userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries");
 
-        when(transactionRepository.findById(transactionUuid)).thenReturn(Optional.of(existingTransaction));
+        when(transactionRepository.findById(transactionId)).thenReturn(Optional.of(existingTransaction));
 
-        transactionService.deleteTransaction(transactionUuid);
+        transactionService.deleteTransaction(transactionId);
 
-        verify(transactionRepository).delete(transactionUuid);
+        verify(transactionRepository).delete(transactionId);
     }
 
     @Test
     void deleteTransaction_TransactionNotFound_ThrowsTransactionNotFound() {
-        UUID transactionUuid = UUID.randomUUID();
-        when(transactionRepository.findById(transactionUuid)).thenReturn(Optional.empty());
+        int transactionId = new Random().nextInt(10) + 1;
+        when(transactionRepository.findById(transactionId)).thenReturn(Optional.empty());
 
-        assertThrows(TransactionNotFound.class, () -> transactionService.deleteTransaction(transactionUuid));
+        assertThrows(TransactionNotFound.class, () -> transactionService.deleteTransaction(transactionId));
         verify(transactionRepository, never()).delete(any());
         verify(deleteTransactionListeners, never()).forEach(any());
     }
 
     @Test
     void viewTransactions_ReturnsTransactionsForCurrentUser() {
+        int transactionId = new Random().nextInt(10) + 1;
         List<Transaction> expectedTransactions = List.of(
-                createTransaction(UUID.randomUUID(), userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries"),
-                createTransaction(UUID.randomUUID(), userEmail, TransactionType.INCOME, BigDecimal.valueOf(200), OffsetDateTime.now(), "Description", "Salary")
+                createTransaction(transactionId, userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries"),
+                createTransaction(transactionId, userEmail, TransactionType.INCOME, BigDecimal.valueOf(200), OffsetDateTime.now(), "Description", "Salary")
         );
 
         try (MockedStatic<SecurityContext> mockedSecurityContext = mockStatic(SecurityContext.class)) {
@@ -131,9 +134,10 @@ public class TransactionServiceImplTest {
     @Test
     void viewTransactionsByUserEmail_ReturnsTransactionsForGivenUserEmail() {
         String otherUserEmail = "other@example.com";
+        int transactionId = new Random().nextInt(10) + 1;
         List<Transaction> expectedTransactions = List.of(
-                createTransaction(UUID.randomUUID(), otherUserEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries"),
-                createTransaction(UUID.randomUUID(), otherUserEmail, TransactionType.INCOME, BigDecimal.valueOf(200), OffsetDateTime.now(), "Description", "Salary")
+                createTransaction(transactionId, otherUserEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries"),
+                createTransaction(transactionId, otherUserEmail, TransactionType.INCOME, BigDecimal.valueOf(200), OffsetDateTime.now(), "Description", "Salary")
         );
         when(transactionRepository.getTransactionListByUserEmail(otherUserEmail)).thenReturn(expectedTransactions);
 
@@ -145,10 +149,11 @@ public class TransactionServiceImplTest {
 
     @Test
     void filterTransactions_FiltersTransactionsCorrectly() {
+        int transactionId = new Random().nextInt(10) + 1;
         List<Transaction> allTransactions = List.of(
-                createTransaction(UUID.randomUUID(), userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries"),
-                createTransaction(UUID.randomUUID(), userEmail, TransactionType.INCOME, BigDecimal.valueOf(200), OffsetDateTime.now(), "Description", "Salary"),
-                createTransaction(UUID.randomUUID(), userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(50), OffsetDateTime.now(), "Description", "Utilities")
+                createTransaction(transactionId, userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries"),
+                createTransaction(transactionId, userEmail, TransactionType.INCOME, BigDecimal.valueOf(200), OffsetDateTime.now(), "Description", "Salary"),
+                createTransaction(transactionId, userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(50), OffsetDateTime.now(), "Description", "Utilities")
         );
 
         FilterTransactionsDto filter = FilterTransactionsDto.builder()
@@ -186,9 +191,8 @@ public class TransactionServiceImplTest {
                 .build();
     }
 
-    private Transaction createTransaction(UUID uuid, String userEmail, TransactionType transactionType, BigDecimal sum, OffsetDateTime dateTime, String description, String category) {
+    private Transaction createTransaction(int id, String userEmail, TransactionType transactionType, BigDecimal sum, OffsetDateTime dateTime, String description, String category) {
         return Transaction.builder()
-                .uuid(uuid)
                 .userEmail(userEmail)
                 .transactionType(transactionType)
                 .sum(sum)

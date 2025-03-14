@@ -11,10 +11,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Goal {
+public class Budget {
     int id;
     String userEmail;
-    String goal;
-    BigDecimal target;
-    BigDecimal current;
+    BigDecimal amount;
 }

@@ -12,9 +12,9 @@ public interface TransactionService {
 
     Transaction addTransaction(CreateTransactionDto createTransactionDto);
 
-    void changeTransactionInfo(UUID uuid, ChangeTransInfoDto changeTransInfoDto);
+    void changeTransactionInfo(int id, ChangeTransInfoDto changeTransInfoDto);
 
-    void deleteTransaction(UUID uuid);
+    void deleteTransaction(int id);
 
     List<Transaction> viewTransactions();
 
