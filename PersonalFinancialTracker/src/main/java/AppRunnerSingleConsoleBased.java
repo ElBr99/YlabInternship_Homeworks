@@ -11,9 +11,7 @@ public class AppRunnerSingleConsoleBased {
     private static final ExecutorService executor = Executors.newFixedThreadPool(1); // Пул потоков
 
     public static void main(String[] args) {
-
-        Connection connection = ConnectionManager.get();
-        LiquibaseUtils.launchMigrations(connection);
+        LiquibaseUtils.launchMigrations();
 
         System.out.println("Database migration completed successfully.");
 

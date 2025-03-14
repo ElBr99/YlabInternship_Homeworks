@@ -36,7 +36,6 @@ public final class LiquibaseUtils {
     public static void launchMigrations() {
         @Cleanup Connection connection = ConnectionManager.get();
         var liquibase = initLiquibase(connection);
-        liquibase.dropAll();
         liquibase.update("");
     }
 }
