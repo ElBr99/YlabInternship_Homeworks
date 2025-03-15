@@ -1,11 +1,11 @@
 package repository;
 
+import com.project.utils.ConnectionManager;
+import com.project.utils.LiquibaseUtils;
+import com.project.utils.PropertiesUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
-import utils.ConnectionManager;
-import utils.PropertiesUtils;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,8 +15,7 @@ public abstract class AbstractIntegrationTest {
 
     private static final String PASSWORD_KEY = "db.password";
     private static final String USERNAME_KEY = "db.username";
-    private static final String DATABASE_NAME = "db.dbName";
-    private static final String PORT = "db.port";
+    private static final String URL_KEY = "db.url";
 
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
@@ -24,12 +23,13 @@ public abstract class AbstractIntegrationTest {
 
 
     static {
-        postgres.withExposedPorts(Integer.parseInt(PropertiesUtils.get(PORT)))
-                .withDatabaseName(PropertiesUtils.get(DATABASE_NAME))
-                .withUsername(PropertiesUtils.get(USERNAME_KEY))
-                .withPassword(PropertiesUtils.get(PASSWORD_KEY))
-                .waitingFor(Wait.forListeningPort())
+        postgres
+                .withInitScript("init.sql")
                 .start();
+
+        PropertiesUtils.set(PASSWORD_KEY, postgres.getPassword());
+        PropertiesUtils.set(USERNAME_KEY, postgres.getUsername());
+        PropertiesUtils.set(URL_KEY, postgres.getJdbcUrl());
     }
 
 
@@ -37,8 +37,8 @@ public abstract class AbstractIntegrationTest {
     protected void clearDatabase() {
         try (Connection connection = ConnectionManager.get()) {
             Statement statement = connection.createStatement();
-            String deleteSql = "truncate users, goals, budgets, transactions";
-            statement.executeQuery(deleteSql);
+            String deleteSql = "truncate entities.users, entities.goals, entities.budgets, entities.transactions";
+            statement.execute(deleteSql);
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }

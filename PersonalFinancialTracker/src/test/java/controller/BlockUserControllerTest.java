@@ -1,13 +1,14 @@
 package controller;
 
-import exception.UserNotFound;
-import model.User;
+import com.project.controller.BlockUserController;
+import com.project.exceptions.UserNotFound;
+import com.project.model.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import service.UserService;
+import com.project.service.UserService;
 
 import java.io.BufferedReader;
 import java.io.IOException;

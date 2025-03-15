@@ -1,17 +1,18 @@
 package service.impl;
 
-import dto.EnterUserDto;
-import exception.WrongCredentials;
-import model.Role;
-import model.User;
+import com.project.dtos.EnterUserDto;
+import com.project.exceptions.WrongCredentials;
+import com.project.model.Role;
+import com.project.model.User;
+import com.project.service.impl.LoginServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import service.UserService;
-import utils.SecurityContext;
+import com.project.service.UserService;
+import com.project.utils.SecurityContext;
 
 import java.util.Optional;
 

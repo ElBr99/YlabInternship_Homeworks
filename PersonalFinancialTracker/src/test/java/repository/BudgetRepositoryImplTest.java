@@ -1,6 +1,8 @@
 package repository;
 
-import model.Budget;
+import com.project.model.Budget;
+import com.project.repository.BudgetRepository;
+import com.project.repository.BudgetRepositoryImpl;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

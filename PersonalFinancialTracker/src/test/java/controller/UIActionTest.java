@@ -1,6 +1,6 @@
 package controller;
 
-import dto.UIAction;
+import com.project.dtos.UIAction;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.Stream;

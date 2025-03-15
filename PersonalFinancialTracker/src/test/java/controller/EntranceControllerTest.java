@@ -1,11 +1,12 @@
 package controller;
 
+import com.project.controller.EntranceController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import service.LoginService;
+import com.project.service.LoginService;
 
 import java.io.BufferedReader;
 import java.io.IOException;

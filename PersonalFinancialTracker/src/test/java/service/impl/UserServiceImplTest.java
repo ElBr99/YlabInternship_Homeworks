@@ -1,19 +1,20 @@
 package service.impl;
 
-import dto.ChangeInfoDto;
-import dto.CreateUserDto;
-import exception.UserAlreadyExists;
-import exception.UserNotFound;
-import model.Role;
-import model.User;
+import com.project.dtos.ChangeInfoDto;
+import com.project.dtos.CreateUserDto;
+import com.project.exceptions.UserAlreadyExists;
+import com.project.exceptions.UserNotFound;
+import com.project.model.Role;
+import com.project.model.User;
+import com.project.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import repository.UserRepository;
-import utils.SecurityContext;
+import com.project.repository.UserRepository;
+import com.project.utils.SecurityContext;
 
 import java.util.Optional;
 

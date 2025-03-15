@@ -1,16 +1,16 @@
 package controller;
 
+import com.project.controller.ChangeTransactionController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import service.TransactionService;
+import com.project.service.TransactionService;
 
 import java.math.BigDecimal;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;

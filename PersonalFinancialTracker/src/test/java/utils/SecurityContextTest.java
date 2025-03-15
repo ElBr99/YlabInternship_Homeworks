@@ -1,7 +1,8 @@
 package utils;
 
-import model.Role;
-import model.User;
+import com.project.model.Role;
+import com.project.model.User;
+import com.project.utils.SecurityContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 

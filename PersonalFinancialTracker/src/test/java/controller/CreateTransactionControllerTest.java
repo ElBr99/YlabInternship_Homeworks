@@ -1,12 +1,13 @@
 package controller;
 
-import model.TransactionType;
+import com.project.controller.CreateTransactionController;
+import com.project.model.TransactionType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import service.TransactionService;
+import com.project.service.TransactionService;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,6 +1,8 @@
 package repository;
 
-import model.Goal;
+import com.project.model.Goal;
+import com.project.repository.GoalRepository;
+import com.project.repository.GoalRepositoryImpl;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

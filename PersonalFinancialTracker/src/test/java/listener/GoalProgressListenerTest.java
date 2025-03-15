@@ -1,15 +1,16 @@
 package listener;
 
-import dto.UpdateGoalDto;
-import model.Goal;
-import model.Transaction;
-import model.TransactionType;
+import com.project.dtos.UpdateGoalDto;
+import com.project.listener.GoalProgressListener;
+import com.project.model.Goal;
+import com.project.model.Transaction;
+import com.project.model.TransactionType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import service.GoalService;
+import com.project.service.GoalService;
 
 import java.math.BigDecimal;
 import java.util.Optional;

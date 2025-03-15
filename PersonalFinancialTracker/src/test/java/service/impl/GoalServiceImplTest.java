@@ -1,16 +1,17 @@
 package service.impl;
 
-import dto.CreateGoalDto;
-import dto.UpdateGoalDto;
-import model.Goal;
+import com.project.dtos.CreateGoalDto;
+import com.project.dtos.UpdateGoalDto;
+import com.project.model.Goal;
+import com.project.service.impl.GoalServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import repository.GoalRepository;
-import utils.SecurityContext;
+import com.project.repository.GoalRepository;
+import com.project.utils.SecurityContext;
 
 import java.math.BigDecimal;
 import java.util.Optional;

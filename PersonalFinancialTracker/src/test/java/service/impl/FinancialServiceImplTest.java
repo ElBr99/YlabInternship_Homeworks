@@ -1,17 +1,18 @@
 package service.impl;
 
-import dto.DatePeriodDto;
-import model.FinancialReport;
-import model.Transaction;
-import model.TransactionType;
+import com.project.dtos.DatePeriodDto;
+import com.project.model.FinancialReport;
+import com.project.model.Transaction;
+import com.project.model.TransactionType;
+import com.project.service.impl.FinancialServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import repository.TransactionRepository;
-import utils.SecurityContext;
+import com.project.repository.TransactionRepository;
+import com.project.utils.SecurityContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

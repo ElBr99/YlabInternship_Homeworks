@@ -1,14 +1,15 @@
 package controller;
 
-import model.User;
+import com.project.controller.DeleteAccountController;
+import com.project.model.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import service.UserService;
-import utils.SecurityContext;
+import com.project.service.UserService;
+import com.project.utils.SecurityContext;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
