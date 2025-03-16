@@ -2,6 +2,7 @@ package com.project.repository;
 
 import com.project.model.Role;
 import com.project.model.User;
+import com.project.utils.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

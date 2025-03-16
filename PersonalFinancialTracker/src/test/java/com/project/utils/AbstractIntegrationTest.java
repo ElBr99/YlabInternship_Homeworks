@@ -1,7 +1,5 @@
-package com.project.repository;
+package com.project.utils;
 
-import com.project.utils.ConnectionManager;
-import com.project.utils.PropertiesUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
@@ -29,6 +27,8 @@ public abstract class AbstractIntegrationTest {
         PropertiesUtils.set(PASSWORD_KEY, postgres.getPassword());
         PropertiesUtils.set(USERNAME_KEY, postgres.getUsername());
         PropertiesUtils.set(URL_KEY, postgres.getJdbcUrl());
+
+        LiquibaseUtils.launchMigrations();
     }
 
 

@@ -8,15 +8,14 @@ import com.project.listener.CreateTransactionListener;
 import com.project.listener.DeleteTransactionListener;
 import com.project.model.Transaction;
 import com.project.model.TransactionType;
-import com.project.service.impl.TransactionServiceImpl;
+import com.project.repository.TransactionRepository;
+import com.project.utils.SecurityContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import com.project.repository.TransactionRepository;
-import com.project.utils.SecurityContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -108,7 +107,8 @@ public class TransactionServiceImplTest {
         when(transactionRepository.findById(transactionId)).thenReturn(Optional.empty());
 
         assertThrows(TransactionNotFound.class, () -> transactionService.deleteTransaction(transactionId));
-        verify(transactionRepository, never()).delete(any());
+        verify(transactionRepository, never()).delete(transactionId);
+
         verify(deleteTransactionListeners, never()).forEach(any());
     }
 
@@ -193,6 +193,7 @@ public class TransactionServiceImplTest {
 
     private Transaction createTransaction(int id, String userEmail, TransactionType transactionType, BigDecimal sum, OffsetDateTime dateTime, String description, String category) {
         return Transaction.builder()
+                .id(id)
                 .userEmail(userEmail)
                 .transactionType(transactionType)
                 .sum(sum)

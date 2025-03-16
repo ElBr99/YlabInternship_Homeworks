@@ -3,16 +3,15 @@ package com.project.repository;
 import com.project.model.Budget;
 import com.project.model.Role;
 import com.project.model.User;
-import org.junit.FixMethodOrder;
+import com.project.utils.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.junit.runners.MethodSorters;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+
 class BudgetRepositoryImplTest extends AbstractIntegrationTest {
 
     private final BudgetRepository budgetRepository = new BudgetRepositoryImpl();

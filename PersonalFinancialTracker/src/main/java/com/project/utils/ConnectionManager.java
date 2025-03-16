@@ -19,7 +19,6 @@ public final class ConnectionManager {
     static {
         loadDriver();
         initConnectionPool();
-        LiquibaseUtils.launchMigrations();
     }
 
     private static void initConnectionPool() {
@@ -73,16 +72,6 @@ public final class ConnectionManager {
             } catch (SQLException e) {
                 log.error("Failed to release connection back to pool", e);
             }
-        }
-    }
-
-    public static void closePool() {
-        try {
-            for (Connection connection : pool) {
-                connection.close(); // Закрываем каждое соединение
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error closing connection pool", e);
         }
     }
 }

@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 public class Transaction {
 
-    private int id;
+    private Integer id;
     private String userEmail;
     private TransactionType transactionType;
     private BigDecimal sum;

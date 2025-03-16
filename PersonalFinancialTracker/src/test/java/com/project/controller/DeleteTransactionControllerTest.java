@@ -30,7 +30,7 @@ public class DeleteTransactionControllerTest {
     void execute_Scanner_ValidInput_DeletesTransaction() {
         Scanner scanner = mock(Scanner.class);
 
-        when(scanner.nextLine()).thenReturn(String.valueOf(testId));
+        when(scanner.nextInt()).thenReturn(testId);
 
         deleteTransactionController.execute(scanner);
 
@@ -42,7 +42,7 @@ public class DeleteTransactionControllerTest {
         PrintWriter out = mock(PrintWriter.class);
         BufferedReader in = mock(BufferedReader.class);
 
-        when(in.readLine()).thenReturn(String.valueOf(testId));
+        when(in.read()).thenReturn(testId);
 
         deleteTransactionController.execute(out, in);
 

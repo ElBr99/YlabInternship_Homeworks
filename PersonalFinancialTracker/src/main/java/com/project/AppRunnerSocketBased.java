@@ -1,6 +1,7 @@
 package com.project;
 
 import com.project.dtos.UIAction;
+import com.project.utils.LiquibaseUtils;
 import com.project.utils.SecurityContext;
 
 import java.io.BufferedReader;
@@ -20,6 +21,7 @@ public class AppRunnerSocketBased {
     private static final ExecutorService executor = Executors.newFixedThreadPool(USER_COUNT);
 
     public static void main(String[] args) throws IOException {
+        LiquibaseUtils.launchMigrations();
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Сервер запущен на порту " + PORT);
             while (true) {
