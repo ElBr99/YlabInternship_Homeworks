@@ -1,7 +1,6 @@
-package repository;
+package com.project.repository;
 
 import com.project.utils.ConnectionManager;
-import com.project.utils.LiquibaseUtils;
 import com.project.utils.PropertiesUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -35,8 +34,8 @@ public abstract class AbstractIntegrationTest {
 
     @AfterEach
     protected void clearDatabase() {
-        try (Connection connection = ConnectionManager.get()) {
-            Statement statement = connection.createStatement();
+        try (Connection connection = ConnectionManager.get();
+             Statement statement = connection.createStatement()) {
             String deleteSql = "truncate entities.users, entities.goals, entities.budgets, entities.transactions";
             statement.execute(deleteSql);
         } catch (SQLException exception) {

@@ -1,4 +1,4 @@
-package service.impl;
+package com.project.impl;
 
 import com.project.model.Budget;
 import com.project.service.impl.BudgetServiceImpl;

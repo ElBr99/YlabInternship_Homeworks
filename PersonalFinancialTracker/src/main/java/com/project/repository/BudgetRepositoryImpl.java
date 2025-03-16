@@ -4,6 +4,7 @@ import com.project.model.Budget;
 import com.project.utils.ConnectionManager;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -37,8 +38,7 @@ public class BudgetRepositoryImpl implements BudgetRepository {
             preparedStatement.setString(1, budget.getUserEmail());
             preparedStatement.setBigDecimal(2, budget.getAmount());
 
-
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

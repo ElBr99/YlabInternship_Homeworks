@@ -1,8 +1,7 @@
-package repository;
+package com.project.repository;
 
 import com.project.model.Role;
 import com.project.model.User;
-import com.project.repository.UserRepositoryImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -22,17 +21,6 @@ public class UserRepositoryImplTest extends AbstractIntegrationTest {
 
         assertEquals(newUser, userRepository.findByEmail(newUser.getEmail()).get());
     }
-//
-//    @Test
-//    void save_ExistingUser_DoesNotOverwrite() {
-//        String existingEmail = "test@example.com";
-//        User initialUser = createUser("Initial User", existingEmail, "initialPassword", Role.USER, false);
-//        User newUser = createUser("New User", existingEmail, "newPassword", Role.ADMIN, true);
-//
-////        assertThrows(RuntimeException.class, () -> userRepository.save(newUser));
-//        userRepository.save(newUser);
-//
-//    }
 
     @Test
     void findByEmail_UserExists_ReturnsUser() {
@@ -57,15 +45,36 @@ public class UserRepositoryImplTest extends AbstractIntegrationTest {
 
     @Test
     void update_ExistingUser_UpdatesUserInMap() {
-        String existingEmail = "test@example.com";
-        User initialUser = createUser("Initial User", existingEmail, "initialPassword", Role.USER, false);
-        userRepository.update(initialUser);
+        User testUser = User.builder()
+                .name("testUser")
+                .email("testUser@example.com")
+                .password("testUser123")
+                .role(Role.valueOf("USER"))
+                .blocked(false)
+                .build();
 
-        User updatedUser = createUser("Updated User", existingEmail, "updatedPassword", Role.ADMIN, true);
+        userRepository.save(testUser);
+
+        User updatedUser = User.builder()
+                .name("Updated User")
+                .email(testUser.getEmail())
+                .password("updatedPassword")
+                .role(Role.valueOf("USER"))
+                .blocked(false)
+                .build();
 
         userRepository.update(updatedUser);
+        Optional<User> foundUserOptional = userRepository.findByEmail(testUser.getEmail());
 
-        assertEquals(updatedUser, userRepository.findByEmail(existingEmail).get());
+        assertTrue(foundUserOptional.isPresent());
+        User foundUser = foundUserOptional.get();
+
+        assertEquals("Updated User", foundUser.getName());
+        assertEquals("updatedPassword", foundUser.getPassword());
+        assertEquals(testUser.getEmail(), foundUser.getEmail());
+        assertEquals(Role.valueOf("USER"), foundUser.getRole());
+        assertFalse(foundUser.getBlocked());
+
     }
 
     @Test
@@ -76,7 +85,7 @@ public class UserRepositoryImplTest extends AbstractIntegrationTest {
 
         userRepository.delete(userToDelete);
 
-        assertNull(userRepository.findByEmail(existingEmail));
+        assertTrue(userRepository.findByEmail(existingEmail).isEmpty());
     }
 
     @Test
@@ -84,8 +93,7 @@ public class UserRepositoryImplTest extends AbstractIntegrationTest {
         User nonExistingUser = createUser("Non Existent", "nonexistent@example.com", "password", Role.USER, false);
 
         userRepository.delete(nonExistingUser);
-
-        assertThrows(RuntimeException.class, () -> userRepository.delete(nonExistingUser));
+        assertDoesNotThrow(() -> userRepository.delete(nonExistingUser) );
     }
 
     private User createUser(String name, String email, String password, Role role, boolean blocked) {

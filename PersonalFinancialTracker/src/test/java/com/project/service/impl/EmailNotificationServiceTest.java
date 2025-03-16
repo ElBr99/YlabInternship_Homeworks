@@ -1,4 +1,4 @@
-package service.impl;
+package com.project.service.impl;
 
 import com.project.service.impl.EmailNotificationService;
 import org.junit.jupiter.api.AfterEach;

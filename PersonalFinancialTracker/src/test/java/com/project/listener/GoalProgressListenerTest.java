@@ -1,4 +1,4 @@
-package listener;
+package com.project.listener;
 
 import com.project.dtos.UpdateGoalDto;
 import com.project.listener.GoalProgressListener;

@@ -1,4 +1,4 @@
-package controller;
+package com.project.controller;
 
 import com.project.dtos.UIAction;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package controller;
+package com.project.controller;
 
 import com.project.controller.DeleteTransactionController;
 import org.junit.jupiter.api.Test;

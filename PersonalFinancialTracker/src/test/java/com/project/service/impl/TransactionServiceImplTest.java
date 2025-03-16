@@ -1,4 +1,4 @@
-package service.impl;
+package com.project.service.impl;
 
 import com.project.dtos.ChangeTransInfoDto;
 import com.project.dtos.CreateTransactionDto;

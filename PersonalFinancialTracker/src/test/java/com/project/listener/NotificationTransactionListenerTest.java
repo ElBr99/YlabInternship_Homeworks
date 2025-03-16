@@ -1,4 +1,4 @@
-package listener;
+package com.project.listener;
 
 import com.project.listener.NotificationTransactionListener;
 import com.project.model.Transaction;

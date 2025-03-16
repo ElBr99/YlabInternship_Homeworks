@@ -1,4 +1,4 @@
-package utils;
+package com.project.utils;
 
 import com.project.model.Role;
 import com.project.model.User;

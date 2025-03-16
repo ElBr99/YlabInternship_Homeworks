@@ -21,7 +21,7 @@ public class GoalRepositoryImpl implements GoalRepository {
             preparedStatement.setBigDecimal(3, goal.getTarget());
             preparedStatement.setBigDecimal(4, goal.getCurrent());
 
-            preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -51,12 +51,14 @@ public class GoalRepositoryImpl implements GoalRepository {
 
             if (resultSet.next() && resultSet != null) {
 
-                Goal goal = new Goal(resultSet.getInt(1),
-                        resultSet.getString(2),
-                        resultSet.getString(3),
-                        resultSet.getBigDecimal(4),
-                        resultSet.getBigDecimal(5)
-                );
+                Goal goal = Goal.builder()
+                        .id(resultSet.getInt("id"))
+                        .userEmail(resultSet.getString("user_email"))
+                        .goal(resultSet.getString("goal"))
+                        .target(resultSet.getBigDecimal("target_amount"))
+                        .current(resultSet.getBigDecimal("current_amount"))
+                        .build();
+
                 return Optional.of(goal);
             } else {
                 return Optional.empty();

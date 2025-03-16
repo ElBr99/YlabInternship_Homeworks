@@ -1,4 +1,4 @@
-package service.impl;
+package com.project.service.impl;
 
 import com.project.dtos.DatePeriodDto;
 import com.project.model.FinancialReport;

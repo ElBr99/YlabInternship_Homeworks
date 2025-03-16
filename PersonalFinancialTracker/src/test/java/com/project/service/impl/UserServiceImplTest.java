@@ -1,4 +1,4 @@
-package service.impl;
+package com.project.impl;
 
 import com.project.dtos.ChangeInfoDto;
 import com.project.dtos.CreateUserDto;
