@@ -3,9 +3,15 @@ package com.project.repository;
 import com.project.model.Goal;
 import com.project.model.Role;
 import com.project.model.User;
+import com.project.utils.ConnectionManager;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,6 +20,7 @@ class GoalRepositoryImplTest extends AbstractIntegrationTest {
 
     private final GoalRepository goalRepository = new GoalRepositoryImpl();
     private final UserRepository userRepository = new UserRepositoryImpl();
+
 
     @Test
     void createGoal_NewGoal_ReturnsNull() {

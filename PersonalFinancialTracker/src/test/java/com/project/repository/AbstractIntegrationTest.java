@@ -33,13 +33,18 @@ public abstract class AbstractIntegrationTest {
 
 
     @AfterEach
-    protected void clearDatabase() {
-        try (Connection connection = ConnectionManager.get();
-             Statement statement = connection.createStatement()) {
-            String deleteSql = "truncate entities.users, entities.goals, entities.budgets, entities.transactions";
-            statement.execute(deleteSql);
+    void clearDatabase() {
+        Connection connection = null;
+        try {
+            connection = ConnectionManager.get();
+            try (Statement statement = connection.createStatement()) {
+                String deleteSql = "truncate entities.users, entities.goals, entities.budgets, entities.transactions";
+                statement.executeUpdate(deleteSql);
+            }
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
+        } finally {
+            ConnectionManager.release(connection);
         }
 
     }
