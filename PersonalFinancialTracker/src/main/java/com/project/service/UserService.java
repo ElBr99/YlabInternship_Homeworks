@@ -9,7 +9,6 @@ import java.util.Optional;
 public interface UserService {
     void createUser(CreateUserDto createUserDto);
 
-    //void enter (EnterUserDto enterUserDto);
     void changeInfo(ChangeInfoDto changeInfoDto);
 
     void deleteAccount(String email);
@@ -17,5 +16,3 @@ public interface UserService {
     Optional<User> findByEmail(String email);
 
 }
-
-//при блокировании сделать update и туда передать blockedUser

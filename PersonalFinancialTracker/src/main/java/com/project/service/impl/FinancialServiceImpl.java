@@ -57,7 +57,6 @@ public class FinancialServiceImpl implements FinancialService {
 
     }
 
-    //переписать на один sql запрос
     @Override
     public FinancialReport generateReport() {
         FinancialReport financialReport = new FinancialReport();

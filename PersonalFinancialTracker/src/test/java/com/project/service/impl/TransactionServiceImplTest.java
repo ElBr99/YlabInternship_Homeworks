@@ -62,8 +62,6 @@ public class TransactionServiceImplTest {
 
     @Test
     void changeTransactionInfo_TransactionExists_UpdatesTransaction() {
-
-        //начала править транзакции айди
         int transactionId = new Random().nextInt(10) + 1;
         ChangeTransInfoDto changeTransInfoDto = createChangeTransInfoDto(BigDecimal.valueOf(200), "NewCategory", "NewDescription");
         Transaction existingTransaction = createTransaction(transactionId, userEmail, TransactionType.EXPENDITURE, BigDecimal.valueOf(100), OffsetDateTime.now(), "Description", "Groceries");

@@ -63,7 +63,7 @@ public class AppRunnerSocketBased {
 
                 String inputLine = in.readLine();
                 if (inputLine == null) {
-                    break; // Клиент закрыл соединение
+                    break;
                 }
 
                 int actionValue = Integer.parseInt(inputLine);

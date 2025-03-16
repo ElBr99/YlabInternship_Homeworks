@@ -62,8 +62,6 @@ public final class ConnectionManager {
     public static void release(Connection connection) {
         if (connection != null) {
             try {
-                // Если соединение не закрыто, добавляем его обратно в пул
-                // Здесь мы просто проверяем, если соединение открыто
                 if (!connection.isClosed()) {
                     pool.offer(connection);
                 } else {
