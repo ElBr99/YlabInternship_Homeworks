@@ -1,13 +1,15 @@
-package service.impl;
+package com.project.service.impl;
 
+import com.project.model.Budget;
+import com.project.service.impl.BudgetServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import repository.BudgetRepository;
-import utils.SecurityContext;
+import com.project.repository.BudgetRepository;
+import com.project.utils.SecurityContext;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -28,12 +30,14 @@ public class BudgetServiceImplTest {
     void setBudgetForCurrentUser_ValidBudget_CallsRepositoryWithCorrectData() {
         BigDecimal budget = BigDecimal.valueOf(1000);
 
+
+
         try (MockedStatic<SecurityContext> mockedSecurityContext = mockStatic(SecurityContext.class)) {
             mockedSecurityContext.when(SecurityContext::getCurrentUserEmail).thenReturn(userEmail);
 
             budgetService.setBudgetForCurrentUser(budget);
 
-            verify(budgetRepository).setBudgetForUser(userEmail, budget);
+            verify(budgetRepository).setBudgetForUser(Budget.builder().userEmail(userEmail).amount(budget).build());
         }
     }
 
