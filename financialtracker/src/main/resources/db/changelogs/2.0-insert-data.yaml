@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: elbr:0
+      author: elbr
+      changes:
+        - sql: |
+            INSERT INTO entities.users (name, email, password, role, blocked) VALUES 
+            ('Admin', 'admin@mail.ru', 'admin', 'ADMIN', false),
+            ('Ivan', 'ivan@mail.ru', 'ivan', 'USER', false),
+            ('Sveta', 'sveta@mail.ru', 'sveta', 'USER', false);
+
+  - changeSet:
+      id: elbr:1
+      author: elbr
+      changes:
+        - sql: |
+            INSERT INTO entities.transactions (user_email, transaction_type, amount, description, category, date_time) VALUES
+            ('ivan@mail.ru', 'INCOME', 10000, 'возврат долга', 'прочие доходы', now()),
+            ('ivan@mail.ru', 'EXPENDITURE', 2000, 'поход в кино', 'развлечения', now()),
+            ('sveta@mail.ru', 'INCOME', 3000, 'подарок на др от подруги', 'подарки', now()),
+            ('sveta@mail.ru', 'INCOME', 4000, 'кэшбэк по карте', 'кэшбэк', now());
+
+  - changeSet:
+      id: elbr:2
+      author: elbr
+      changes:
+        - sql: |
+            INSERT INTO entities.goals (user_email, goal, target_amount, current_amount) VALUES
+            ('ivan@mail.ru', 'накопление', 100000, 40000),
+            ('sveta@mail.ru', 'накопление', 500000, 250000);

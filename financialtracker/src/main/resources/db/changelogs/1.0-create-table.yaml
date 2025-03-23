@@ -1,0 +1,149 @@
+databaseChangeLog:
+  - changeSet:
+      id: elbr:0
+      author: elbr
+      changes:
+        - sql:
+            endDelimiter: ''
+            sql: 'CREATE SCHEMA IF NOT EXISTS entities;'
+
+  - changeSet:
+      id: elbr:1
+      author: elbr
+      changes:
+        - createTable:
+            tableName: users
+            schemaName: entities
+            ifNotExists: true
+            columns:
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: blocked
+                  type: boolean
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: elbr:2
+      author: elbr
+      changes:
+        - createTable:
+            tableName: transactions
+            schemaName: entities
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_email
+                    references: users(email)
+                    onDelete: cascade
+              - column:
+                  name: transaction_type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: numeric(15, 2)
+              - column:
+                  name: date_time
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: elbr:3
+      author: elbr
+      changes:
+        - createTable:
+            tableName: goals
+            schemaName: entities
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_email
+                    references: users(email)
+                    onDelete: cascade
+              - column:
+                  name: goal
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: target_amount
+                  type: numeric(15, 2)
+              - column:
+                  name: current_amount
+                  type: numeric(15, 2)
+
+  - changeSet:
+      id: elbr:4
+      author: elbr
+      changes:
+        - createTable:
+            tableName: budgets
+            schemaName: entities
+            ifNotExists: true
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_email
+                    references: users(email)
+                    onDelete: cascade
+              - column:
+                  name: amount
+                  type: numeric(15, 2)
