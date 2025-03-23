@@ -3,10 +3,9 @@ package com.project.service.impl;
 import com.project.dtos.ChangeInfoDto;
 import com.project.dtos.CreateUserDto;
 import com.project.exceptions.UserAlreadyExists;
-import com.project.exceptions.UserNotFound;
+import com.project.exceptions.UserNotFoundException;
 import com.project.model.Role;
 import com.project.model.User;
-import com.project.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -130,7 +129,7 @@ public class UserServiceImplTest {
     void deleteAccount_NonExistingUser_ThrowsUserNotFound() {
         when(userRepository.findByEmail(userEmail)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFound.class, () -> userService.deleteAccount(userEmail));
+        assertThrows(UserNotFoundException.class, () -> userService.deleteAccount(userEmail));
         verify(userRepository, never()).delete(any());
     }
 

@@ -3,7 +3,7 @@ package com.project.service.impl;
 import com.project.dtos.ChangeInfoDto;
 import com.project.dtos.CreateUserDto;
 import com.project.exceptions.UserAlreadyExists;
-import com.project.exceptions.UserNotFound;
+import com.project.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import com.project.model.Role;
 import com.project.model.User;
@@ -30,6 +30,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(createUserDto.getPassword());
         user.setRole(Role.USER);
         user.setBlocked(false);
+
+        //маппер мапстракт
 
         userRepository.save(user);
     }
@@ -64,7 +66,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(email).isPresent()) {
             user = userRepository.findByEmail(email).get();
         } else {
-            throw new UserNotFound("Пользователь не найден");
+            throw new UserNotFoundException("Пользователь не найден");
         }
         userRepository.delete(user);
 
