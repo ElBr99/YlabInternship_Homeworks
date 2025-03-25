@@ -27,21 +27,17 @@ public class BlockUserServlet extends HttpServlet {
         try {
             String idParam = req.getParameter("email");
 
-            User user = new User();
-            try {
-                user = userService.findByEmail(idParam)
-                        .orElseThrow(() -> new UserNotFoundException("Такого пользователя нет в системе"));
-            } catch (UserNotFoundException exception) {
-                exception.getMessage();
-            }
+//             User user = userService.findByEmail(idParam)
+//                        .orElseThrow(() -> new UserNotFoundException("Такого пользователя нет в системе"));
+//
+//
+//            ChangeInfoDto changeInfoDto = new ChangeInfoDto();
+//            changeInfoDto.setName(user.getName());
+//            changeInfoDto.setEmail(user.getEmail());
+//            changeInfoDto.setPassword(user.getPassword());
+//            changeInfoDto.setBlock(true);
 
-            ChangeInfoDto changeInfoDto = new ChangeInfoDto();
-            changeInfoDto.setName(user.getName());
-            changeInfoDto.setEmail(user.getEmail());
-            changeInfoDto.setPassword(user.getPassword());
-            changeInfoDto.setBlock(true);
-
-            userService.changeInfo(changeInfoDto);
+            userService.blockUser(idParam);
 
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.setContentType("application/json");

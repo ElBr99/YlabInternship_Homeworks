@@ -28,8 +28,9 @@ public class AuthorizationFilter implements Filter {
                 if (isAdminPath(uri)) {
                     if (isUserAdmin(servletRequest)) {
                         filterChain.doFilter(servletRequest, servletResponse);
+                    } else {
+                        ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN, "Доступ запрещён");
                     }
-                    ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN, "Доступ запрещён");
                 } else {
                     filterChain.doFilter(servletRequest, servletResponse);
                 }

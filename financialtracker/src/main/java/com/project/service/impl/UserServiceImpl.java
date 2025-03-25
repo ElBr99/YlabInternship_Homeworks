@@ -4,12 +4,12 @@ import com.project.dtos.ChangeInfoDto;
 import com.project.dtos.CreateUserDto;
 import com.project.exceptions.UserAlreadyExists;
 import com.project.exceptions.UserNotFoundException;
-import lombok.RequiredArgsConstructor;
 import com.project.model.Role;
 import com.project.model.User;
 import com.project.repository.UserRepository;
 import com.project.service.UserService;
 import com.project.utils.SecurityContext;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changeInfo(ChangeInfoDto changeInfoDto) {
+
         User currentUser = SecurityContext.getCurrentUserInfo();
 
         if (changeInfoDto.getName() != null) {
@@ -71,6 +72,18 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
 
     }
+
+    @Override
+    public void blockUser(String email) {
+        User user = findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Такого пользователя нет в системе"));
+
+        user.setBlocked(true);
+
+        userRepository.update(user);
+
+    }
+
 
     @Override
     public Optional<User> findByEmail(String email) {
