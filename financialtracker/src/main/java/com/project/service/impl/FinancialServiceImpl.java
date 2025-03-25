@@ -62,10 +62,13 @@ public class FinancialServiceImpl implements FinancialService {
     @Override
     public FinancialReport generateReport() {
         FinancialReport financialReport = new FinancialReport();
-        financialReport.setCurrentStatement(findCurrentFinancialStatement());
+        financialReport.setCurrentStatement((transactionRepository.findIncome(getCurrentUserEmail())).subtract(transactionRepository.findExpenditure(getCurrentUserEmail())));
         financialReport.setIncomeForPeriod(transactionRepository.findIncome(getCurrentUserEmail()));
         financialReport.setExpenseForPeriod(transactionRepository.findExpenditure(getCurrentUserEmail()));
-        financialReport.setExpenseByCategory(showExpenseByCategories());
+        financialReport.setExpenseByCategory(transactionRepository.findAllExpenditures(getCurrentUserEmail())
+                .stream()
+                .collect(Collectors.groupingBy(Transaction::getCategory, Collectors.mapping(Transaction::getSum, Collectors.reducing(BigDecimal.ZERO, BigDecimal::add)))));
+
         return financialReport;
     }
 

@@ -5,6 +5,7 @@ import com.project.model.TransactionType;
 import com.project.utils.ConnectionManager;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +22,7 @@ public class TransactionRepository {
     private static final String UPDATE_SQL = "update entities.transactions set amount=?, description=?, category=?";
     private static final String FIND_BY_ID = "select * from entities.transactions where id = ?";
     private static final String DELETE_TRANSACTION = "delete * from entities.transactions";
-    private static final String FIND_INCOME = "select count(amount) from entities.transactions where user_email = ? and transaction_type ='INCOME' ";
+    private static final String FIND_INCOME = "select count(amount) as amount from entities.transactions where user_email = ? and transaction_type ='INCOME' ";
     private static final String FIND_EXPENDITURE = "select count(amount) from entities.transactions where user_email = ? and transaction_type ='EXPENDITURE' ";
     private static final String GET_ALL_TRANSACTIONS = "select * from entities.transactions where user_email = ?";
     private static final String GET_ALL_EXPENDITURES_TRANSACTIONS = "select * from entities.transactions where user_email = ? and transaction_type ='EXPENDITURE' ";
@@ -116,15 +117,22 @@ public class TransactionRepository {
 
     public BigDecimal findIncome(String email) {
         Connection connection = null;
+        BigDecimal sum = new BigDecimal(BigInteger.ZERO);
         try {
             connection = ConnectionManager.get();
             try (var preparedStatement = connection.prepareStatement(FIND_INCOME)) {
                 preparedStatement.setString(1, email);
-                return BigDecimal.valueOf(preparedStatement.executeUpdate());
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    sum = resultSet.getBigDecimal("amount");
+                }
             }
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }
+        return sum;
+
     }
 
 
@@ -136,10 +144,11 @@ public class TransactionRepository {
                 preparedStatement.setString(1, email);
                 return BigDecimal.valueOf(preparedStatement.executeUpdate());
 
-
             }
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
+        } finally {
+            ConnectionManager.release(connection);
         }
     }
 
