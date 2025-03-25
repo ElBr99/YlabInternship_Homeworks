@@ -27,15 +27,6 @@ public class BlockUserServlet extends HttpServlet {
         try {
             String idParam = req.getParameter("email");
 
-//             User user = userService.findByEmail(idParam)
-//                        .orElseThrow(() -> new UserNotFoundException("Такого пользователя нет в системе"));
-//
-//
-//            ChangeInfoDto changeInfoDto = new ChangeInfoDto();
-//            changeInfoDto.setName(user.getName());
-//            changeInfoDto.setEmail(user.getEmail());
-//            changeInfoDto.setPassword(user.getPassword());
-//            changeInfoDto.setBlock(true);
 
             userService.blockUser(idParam);
 
