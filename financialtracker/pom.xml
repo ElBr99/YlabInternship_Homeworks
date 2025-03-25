@@ -42,7 +42,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.13.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
@@ -71,9 +70,6 @@
             <artifactId>lombok-mapstruct-binding</artifactId>
             <version>0.2.0</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/aspectj-maven-plugin -->
-
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
@@ -133,7 +129,6 @@
     </dependencies>
 
     <build>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -148,7 +143,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.14.0 </version>
+                <version>1.14.0</version>
 
                 <configuration>
                     <complianceLevel>11</complianceLevel>
@@ -159,15 +154,11 @@
                     <Xlint>ignore</Xlint>
                     <encoding>UTF-8</encoding>
 
-
-                    <!-- IMPORTANT-->
                     <excludes>
                         <exclude>**/*.java</exclude>
                     </excludes>
                     <forceAjcCompile>true</forceAjcCompile>
                     <sources/>
-                    <!-- IMPORTANT-->
-
 
                     <aspectLibraries>
                         <aspectLibrary>
@@ -182,7 +173,6 @@
                         <id>default-compile</id>
                         <phase>process-classes</phase>
                         <goals>
-                            <!-- use this goal to weave all your main classes -->
                             <goal>compile</goal>
                         </goals>
                         <configuration>
@@ -195,7 +185,6 @@
                         <id>default-testCompile</id>
                         <phase>process-test-classes</phase>
                         <goals>
-                            <!-- use this goal to weave all your test classes -->
                             <goal>test-compile</goal>
                         </goals>
                         <configuration>
@@ -206,67 +195,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-<!--            <plugin>-->
-<!--                <groupId>org.codehaus.mojo</groupId>-->
-<!--                <artifactId>aspectj-maven-plugin</artifactId>-->
-<!--                <version>1.14.0</version>-->
-<!--                <configuration>-->
-<!--                    <complianceLevel>11</complianceLevel>-->
-<!--                    <source>11</source>-->
-<!--                    <target>11</target>-->
-<!--                    &lt;!&ndash; <skip>true</skip> &lt;!&ndash; Пропустить компиляцию &ndash;&gt; &ndash;&gt;-->
-<!--                    <aspectLibraries>-->
-<!--                        <aspectLibrary>-->
-<!--                            <groupId>org.aspectj</groupId>-->
-<!--                            <artifactId>aspectjrt</artifactId>-->
-<!--                        </aspectLibrary>-->
-<!--                    </aspectLibraries>-->
-<!--                    <weaveDependencies>-->
-<!--                        <weaveDependency>-->
-<!--                            <groupId>org.example</groupId> &lt;!&ndash; Замените на ваш groupId &ndash;&gt;-->
-<!--                            <artifactId>PersonalFinancialTracker</artifactId> &lt;!&ndash; Замените на ваш artifactId &ndash;&gt;-->
-<!--                        </weaveDependency>-->
-<!--                    </weaveDependencies>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>compile</goal>-->
-<!--                            <goal>test-compile</goal>-->
-<!-- -                            <goal>weave</goal>-->
-<!--                        </goals>-->
-<!--                        <phase>process-classes</phase>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-
-
-            <!--            <plugin>-->
-            <!--                <groupId>org.codehaus.mojo</groupId>-->
-            <!--                <artifactId>aspectj-maven-plugin</artifactId>-->
-            <!--                <version>1.14.0</version> &lt;!&ndash; Используйте актуальную версию &ndash;&gt;-->
-            <!--                <configuration>-->
-            <!--                    <complianceLevel>11</complianceLevel>-->
-            <!--                    <source>11</source>-->
-            <!--                    <target>11</target>-->
-            <!--                    <aspectLibraries>-->
-            <!--                        <aspectLibrary>-->
-            <!--                            <groupId>org.aspectj</groupId>-->
-            <!--                            <artifactId>aspectjrt</artifactId>-->
-            <!--                        </aspectLibrary>-->
-            <!--                    </aspectLibraries>-->
-            <!--                </configuration>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <goals>-->
-            <!--                            <goal>compile</goal>-->
-            <!--                            <goal>test-compile</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-
         </plugins>
     </build>
 
