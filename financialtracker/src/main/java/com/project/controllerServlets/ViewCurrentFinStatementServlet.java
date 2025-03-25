@@ -26,10 +26,10 @@ public class ViewCurrentFinStatementServlet extends HttpServlet {
         try {
             var currentFinancialStatement = financialService.findCurrentFinancialStatement();
             resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK); // 200 OK
+            resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(objectMapper.writeValueAsString(Map.of("currentFinancialStatement", currentFinancialStatement)));
         } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "An unexpected error occurred")));
         }
     }

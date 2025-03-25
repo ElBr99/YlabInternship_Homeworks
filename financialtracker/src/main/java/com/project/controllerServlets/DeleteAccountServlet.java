@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.BeanFactoryProvider;
 import com.project.dtos.EnterUserDto;
 import com.project.exceptions.UserNotFoundException;
-import com.project.model.User;
 import com.project.service.UserService;
 import com.project.utils.SecurityContext;
 import jakarta.servlet.ServletException;
@@ -26,7 +25,6 @@ public class DeleteAccountServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       // req.setAttribute("servletClass", DeleteAccountServlet.class);
         var user = (EnterUserDto) req.getSession().getAttribute("user");
 
         try {

@@ -26,16 +26,15 @@ public class GetUserTransactionServlet extends HttpServlet {
         req.setAttribute("servletClass", GetUserTransactionServlet.class);
         String idParam = req.getParameter("email");
 
-
         try {
             transactionService.viewTransactionsByUserEmail(idParam);
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.setContentType("json");
+            resp.setContentType("application/json");
         } catch (UserNotFoundException e) {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "User not found")));
         } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "An unexpected error occurred")));
         }
     }

@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -26,14 +25,13 @@ public class EntranceServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        // BufferedReader bufferedReader = req.getReader();
+
         EnterUserDto enterUserDto = (EnterUserDto) req.getAttribute("user");
 
         loginService.enter(enterUserDto)
                 .ifPresentOrElse(user -> onLoginSuccess(user, req, resp),
                         () -> onLoginFail(resp));
     }
-
 
     private void onLoginFail(HttpServletResponse resp) {
 

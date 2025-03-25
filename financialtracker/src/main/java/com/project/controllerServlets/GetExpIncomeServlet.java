@@ -32,11 +32,11 @@ public class GetExpIncomeServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.setContentType("application/json");
             PrintWriter out = resp.getWriter();
-            out.print(objectMapper.writeValueAsString(datePeriodDto)); // Возвращаем созданного пользователя
+            out.print(objectMapper.writeValueAsString(datePeriodDto));
             out.flush();
 
         } catch (Exception exception) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.setContentType("application/json");
             PrintWriter out = resp.getWriter();
             out.print("{\"error\": \"" + exception.getMessage() + "\"}");

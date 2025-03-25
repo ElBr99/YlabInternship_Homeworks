@@ -24,7 +24,6 @@ public class RegistrationServlet extends HttpServlet {
 
     private final ObjectMapper objectMapper = BeanFactoryProvider.get(ObjectMapper.class);
 
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
@@ -36,12 +35,12 @@ public class RegistrationServlet extends HttpServlet {
             responseMap.put("message", "Регистрация прошла успешно");
             responseMap.put("createUser", objectMapper.writeValueAsString(createUserDto));
 
-            sendResponse(resp,HttpServletResponse.SC_CREATED,responseMap );
+            sendResponse(resp, HttpServletResponse.SC_CREATED, responseMap);
 
         } catch (UserAlreadyExists exception) {
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", exception.getMessage());
-            sendResponse(resp,HttpServletResponse.SC_BAD_REQUEST, responseMap);
+            sendResponse(resp, HttpServletResponse.SC_BAD_REQUEST, responseMap);
         }
     }
 

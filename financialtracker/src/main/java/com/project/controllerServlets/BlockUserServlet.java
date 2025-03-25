@@ -1,6 +1,4 @@
 package com.project.controllerServlets;
-
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.BeanFactoryProvider;
 import com.project.dtos.ChangeInfoDto;
@@ -25,7 +23,7 @@ public class BlockUserServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        //req.setAttribute("servletClass", BlockUserServlet.class);
+
         try {
             String idParam = req.getParameter("email");
 

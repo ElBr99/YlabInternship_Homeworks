@@ -2,9 +2,7 @@ package com.project.controllerServlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.BeanFactoryProvider;
-import com.project.model.User;
 import com.project.service.FinancialService;
-import com.project.utils.SecurityContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,7 +25,7 @@ public class GetFinancialReportServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         try {
-            var financialReport= financialService.generateReport();
+            var financialReport = financialService.generateReport();
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(objectMapper.writeValueAsString(financialReport));
