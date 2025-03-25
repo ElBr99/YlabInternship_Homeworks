@@ -25,20 +25,14 @@ public class GetFinancialReportServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = SecurityContext.getCurrentUserInfo();
-        if (user == null) {
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-            resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "User not authenticated")));
-            return;
-        }
 
         try {
             var financialReport= financialService.generateReport();
-            resp.setContentType("json");
+            resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(objectMapper.writeValueAsString(financialReport));
         } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "An unexpected error occurred")));
         }
     }

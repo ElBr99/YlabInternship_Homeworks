@@ -39,5 +39,7 @@ public class EditAccountValidator implements MyValidator<ChangeInfoDto> {
         if (changeInfoDto.getEmail() != null && !isValidEmail(changeInfoDto.getEmail())) {
             throw new com.project.exceptions.ValidationException("email должен содержать буквы, цифры, а также разделитель @");
         }
+
+        request.setAttribute("editAccount", changeInfoDto);
     }
 }

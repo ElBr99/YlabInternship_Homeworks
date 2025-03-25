@@ -43,5 +43,7 @@ public class RegistrationValidator implements MyValidator<CreateUserDto> {
             throw new com.project.exceptions.ValidationException("Поле пароль не должно быть пустым.");
         }
 
+        request.setAttribute("createUser", createUserDto);
+
     }
 }

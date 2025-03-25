@@ -4,14 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.BeanFactoryProvider;
 import com.project.dtos.EnterUserDto;
 import com.project.service.LoginService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
@@ -26,29 +25,23 @@ public class EntranceServlet extends HttpServlet {
     private final ObjectMapper objectMapper = BeanFactoryProvider.get(ObjectMapper.class);
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("servletClass", EntranceServlet.class);
-        try (BufferedReader bufferedReader = req.getReader()) {
-            EnterUserDto enterUserDto = objectMapper.readValue(bufferedReader, EnterUserDto.class);
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        // BufferedReader bufferedReader = req.getReader();
+        EnterUserDto enterUserDto = (EnterUserDto) req.getAttribute("user");
 
-            loginService.enter(enterUserDto);
-
-        }
+        loginService.enter(enterUserDto)
+                .ifPresentOrElse(user -> onLoginSuccess(user, req, resp),
+                        () -> onLoginFail(resp));
     }
 
-    private void onLoginFail(HttpServletRequest req, HttpServletResponse resp) {
+
+    private void onLoginFail(HttpServletResponse resp) {
 
         try {
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "НЕ удалось войти в систему");
 
-            resp.setContentType("json");
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.setCharacterEncoding("UTF-8");
-
-
-            String jsonResponse = objectMapper.writeValueAsString(responseMap);
-            resp.getWriter().write(jsonResponse);
+            sendResponse(resp, HttpServletResponse.SC_BAD_REQUEST, responseMap);
 
         } catch (IOException exception) {
             throw new RuntimeException(exception);
@@ -57,26 +50,33 @@ public class EntranceServlet extends HttpServlet {
 
     private void onLoginSuccess(EnterUserDto enterUserDto, HttpServletRequest request, HttpServletResponse response) {
         try {
-            request.getSession().setAttribute("user", enterUserDto);
+            enterUserDto = (EnterUserDto) request.getAttribute("user");
 
+            request.getSession().setAttribute("user", enterUserDto);
             Map<String, String> responseMap = new HashMap<>();
             responseMap.put("message", "Пользователь успешно залогинился!");
+            responseMap.put("user", objectMapper.writeValueAsString(enterUserDto));
 
-            response.setContentType("json");
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.setCharacterEncoding("UTF-8");
+            sendResponse(response, HttpServletResponse.SC_OK, responseMap);
 
-            PrintWriter out = response.getWriter();
-            out.print(objectMapper.writeValueAsString(enterUserDto));
-
-            String jsonResponse = objectMapper.writeValueAsString(responseMap);
-
-            response.getWriter().write(jsonResponse);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
 
     }
 
+    private void sendResponse(HttpServletResponse resp, int statusCode, Map<String, String> responseMap) throws IOException {
+        resp.setContentType("application/json");
+        resp.setStatus(statusCode);
+        resp.setCharacterEncoding("UTF-8");
 
+        try (PrintWriter out = resp.getWriter()) {
+            String jsonResponse = objectMapper.writeValueAsString(responseMap);
+            out.print(jsonResponse);
+            out.flush();
+        }
+    }
 }
+
+
+

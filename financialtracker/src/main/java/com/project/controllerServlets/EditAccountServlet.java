@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -23,27 +22,26 @@ public class EditAccountServlet extends HttpServlet {
     private final ObjectMapper objectMapper = BeanFactoryProvider.get(ObjectMapper.class);
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("servletClass", EditAccountServlet.class);
-        try (BufferedReader bufferedReader = req.getReader()) {
-            ChangeInfoDto changeInfoDto = objectMapper.readValue(bufferedReader, ChangeInfoDto.class);
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-            try {
-                userService.changeInfo(changeInfoDto);
-                resp.setStatus(HttpServletResponse.SC_OK);
-                resp.setContentType("json");
-                PrintWriter out = resp.getWriter();
-                out.print(objectMapper.writeValueAsString(changeInfoDto));
-                out.flush();
-            } catch (Exception exception) {
-                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                resp.setContentType("json");
-                PrintWriter out = resp.getWriter();
-                out.print("{\"error\": \"" + exception.getMessage() + "\"}");
-                out.flush();
-            }
+        ChangeInfoDto changeInfoDto = (ChangeInfoDto) req.getAttribute("editAccount");
 
-
+        try {
+            userService.changeInfo(changeInfoDto);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("application/json");
+            PrintWriter out = resp.getWriter();
+            out.print(objectMapper.writeValueAsString(changeInfoDto));
+            out.flush();
+        } catch (Exception exception) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.setContentType("application/json");
+            PrintWriter out = resp.getWriter();
+            out.print("{\"error\": \"" + exception.getMessage() + "\"}");
+            out.flush();
         }
+
+
     }
 }
+

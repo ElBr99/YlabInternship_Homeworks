@@ -24,9 +24,8 @@ public class ViewCurrentFinStatementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            // Получение текущего финансового состояния
             var currentFinancialStatement = financialService.findCurrentFinancialStatement();
-            resp.setContentType("json");
+            resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK); // 200 OK
             resp.getWriter().write(objectMapper.writeValueAsString(Map.of("currentFinancialStatement", currentFinancialStatement)));
         } catch (Exception e) {

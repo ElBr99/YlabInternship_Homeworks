@@ -16,7 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/createTransaction")
+@WebServlet("/createTransactionServlet")
 @NoArgsConstructor
 public class CreateTransactionServlet extends HttpServlet {
 
@@ -26,10 +26,8 @@ public class CreateTransactionServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("servletClass", CreateTransactionServlet.class);
-        try (BufferedReader bufferedReader = req.getReader()) {
-            CreateTransactionDto createTransactionDto = objectMapper.readValue(bufferedReader, CreateTransactionDto.class);
 
+            CreateTransactionDto createTransactionDto = (CreateTransactionDto) req.getAttribute("createTransaction");
 
             transactionService.addTransaction(createTransactionDto);
             resp.setStatus(HttpServletResponse.SC_CREATED);
@@ -37,8 +35,5 @@ public class CreateTransactionServlet extends HttpServlet {
             PrintWriter out = resp.getWriter();
             out.print(objectMapper.writeValueAsString(createTransactionDto));
             out.flush();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
     }
 }

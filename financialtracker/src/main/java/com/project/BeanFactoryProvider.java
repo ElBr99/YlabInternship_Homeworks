@@ -1,6 +1,7 @@
 package com.project;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project.listener.CreateTransactionListener;
 import com.project.listener.DeleteTransactionListener;
 import com.project.listener.GoalProgressListener;
@@ -41,6 +42,7 @@ public class BeanFactoryProvider {
         deleteTransactionListenerList.add(new GoalProgressListener(goalService));
         TransactionService transactionService = new TransactionServiceImpl(transactionRepository, createTransactionListenerList, deleteTransactionListenerList);
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
 
         beanFactoryProvider.put(UserService.class, userService);
         beanFactoryProvider.put(LoginService.class, loginService);

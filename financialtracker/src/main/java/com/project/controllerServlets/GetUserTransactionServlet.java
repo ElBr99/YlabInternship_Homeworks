@@ -26,11 +26,6 @@ public class GetUserTransactionServlet extends HttpServlet {
         req.setAttribute("servletClass", GetUserTransactionServlet.class);
         String idParam = req.getParameter("email");
 
-        if (idParam.isEmpty() || idParam.trim().isEmpty()) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "User ID is required")));
-            return;
-        }
 
         try {
             transactionService.viewTransactionsByUserEmail(idParam);

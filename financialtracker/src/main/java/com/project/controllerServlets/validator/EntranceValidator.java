@@ -15,13 +15,14 @@ public class EntranceValidator implements MyValidator<EnterUserDto> {
 
     @Override
     public void validate(HttpServletRequest request) throws ValidationException, IOException {
-        BufferedReader bufferedReader = request.getReader();
-        EnterUserDto enterUserDto = objectMapper.readValue(bufferedReader, EnterUserDto.class);
+            BufferedReader bufferedReader = request.getReader();
+            EnterUserDto enterUserDto = objectMapper.readValue(bufferedReader, EnterUserDto.class);
 
-        if (enterUserDto.getEmail() == null || enterUserDto.getPassword() == null) {
-            throw new com.project.exceptions.ValidationException("Поля логин и/или пароль не могут быть пустыми");
+            if (enterUserDto.getEmail() == null || enterUserDto.getPassword() == null) {
+                throw new com.project.exceptions.ValidationException("Поля логин и/или пароль не могут быть пустыми");
+            }
+
+            request.setAttribute("user", enterUserDto);
         }
 
-
-    }
 }

@@ -25,24 +25,10 @@ public class DeleteTransactionServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("servletClass", DeleteTransactionServlet.class);
 
         String idParam = req.getParameter("id");
 
-//        if (idParam.isEmpty() || idParam.trim().isEmpty()) {
-//            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "Transaction ID is required")));
-//            return;
-//        }
-
-        int id;
-      //  try {
-            id = Integer.parseInt(idParam);
-//        } catch (NumberFormatException e) {
-//            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//            resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "Invalid transaction ID format")));
-//            return;
-//        }
+        int id = Integer.parseInt(idParam);
 
         try {
             transactionService.deleteTransaction(id);

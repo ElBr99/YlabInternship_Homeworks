@@ -25,13 +25,6 @@ public class ViewExpendituresServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        User user = SecurityContext.getCurrentUserInfo();
-        if (user == null) {
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-            resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "User not authenticated")));
-            return;
-        }
-
         try {
             Map<String, BigDecimal> expenseByCategories = financialService.showExpenseByCategories();
             resp.setContentType("json");

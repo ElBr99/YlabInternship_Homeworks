@@ -40,7 +40,7 @@ public class FilterTransactionsServlet extends HttpServlet {
             try {
                 transactionService.filterTransactions(filterTransactionsDto);
                 resp.setStatus(HttpServletResponse.SC_OK);
-                resp.setContentType("json");
+                resp.setContentType("application/json");
                 PrintWriter out = resp.getWriter();
                 out.print(objectMapper.writeValueAsString(filterTransactionsDto));
                 out.flush();

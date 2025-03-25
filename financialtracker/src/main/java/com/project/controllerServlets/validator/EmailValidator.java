@@ -12,7 +12,7 @@ public class EmailValidator implements MyValidator<String> {
 
     private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
-    private final ObjectMapper objectMapper = BeanFactoryProvider.get(ObjectMapper.class);
+
 
 
     @Override

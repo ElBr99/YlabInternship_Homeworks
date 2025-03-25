@@ -25,12 +25,17 @@ public class BlockUserServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.setAttribute("servletClass", BlockUserServlet.class);
+        //req.setAttribute("servletClass", BlockUserServlet.class);
         try {
             String idParam = req.getParameter("email");
 
-            User user = userService.findByEmail(idParam)
-                    .orElseThrow(() -> new UserNotFoundException("Такого пользователя нет в системе"));
+            User user = new User();
+            try {
+                user = userService.findByEmail(idParam)
+                        .orElseThrow(() -> new UserNotFoundException("Такого пользователя нет в системе"));
+            } catch (UserNotFoundException exception) {
+                exception.getMessage();
+            }
 
             ChangeInfoDto changeInfoDto = new ChangeInfoDto();
             changeInfoDto.setName(user.getName());

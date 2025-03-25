@@ -28,6 +28,8 @@ public class CreateTransactionValidator implements MyValidator<CreateTransaction
             throw new ValidationException("Сумма транзакции не может быть меньше 0");
         }
 
+        request.setAttribute("createTransaction", createTransactionDto);
+
 
     }
 }

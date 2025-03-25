@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class TransactionRepository {
                 preparedStatement.setString(5, transaction.getDescription());
                 preparedStatement.setString(6, transaction.getCategory());
 
-                preparedStatement.executeQuery();
+                preparedStatement.execute();
 
 
             }
@@ -84,7 +85,7 @@ public class TransactionRepository {
                             .userEmail(resultSet.getString(2))
                             .transactionType(TransactionType.valueOf(resultSet.getString(3)))
                             .sum(resultSet.getBigDecimal(4))
-                            .dateTime(OffsetDateTime.from(resultSet.getTimestamp(5).toLocalDateTime()))
+                            .dateTime(OffsetDateTime.of(resultSet.getTimestamp(5).toLocalDateTime(), ZoneOffset.UTC))
                             .description(resultSet.getString(6))
                             .category(resultSet.getString(7))
                             .build();
@@ -188,7 +189,7 @@ public class TransactionRepository {
                             .userEmail(resultSet.getString("user_email"))
                             .transactionType(TransactionType.valueOf(resultSet.getString("transaction_type")))
                             .sum(resultSet.getBigDecimal("amount"))
-                            .dateTime(OffsetDateTime.from((resultSet.getTime("date_time")).toLocalTime()))
+                            .dateTime(OffsetDateTime.of((resultSet.getDate("date_time")).toLocalDate().atStartOfDay(), ZoneOffset.UTC))
                             .description(resultSet.getString("description"))
                             .category(resultSet.getString("category"))
                             .build();

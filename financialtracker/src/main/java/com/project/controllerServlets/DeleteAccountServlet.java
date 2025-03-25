@@ -26,14 +26,8 @@ public class DeleteAccountServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("servletClass", DeleteAccountServlet.class);
+       // req.setAttribute("servletClass", DeleteAccountServlet.class);
         var user = (EnterUserDto) req.getSession().getAttribute("user");
-//       // User user = SecurityContext.getCurrentUserInfo();
-//        if (user == null) {
-//            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-//            resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "User not authenticated")));
-//            return;
-//        }
 
         try {
             userService.deleteAccount(user.getEmail());

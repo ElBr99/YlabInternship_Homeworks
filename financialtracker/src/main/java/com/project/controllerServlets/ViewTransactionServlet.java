@@ -26,21 +26,14 @@ public class ViewTransactionServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = SecurityContext.getCurrentUserInfo();
-        if (user == null) {
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-            resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "User not authenticated")));
-            return;
-        }
 
         try {
-            // Получение списка транзакций
             List<Transaction> transactionList = transactionService.viewTransactions();
             resp.setContentType("json");
             resp.setStatus(HttpServletResponse.SC_OK); // 200 OK
             resp.getWriter().write(objectMapper.writeValueAsString(transactionList));
         } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "An unexpected error occurred")));
         }
     }

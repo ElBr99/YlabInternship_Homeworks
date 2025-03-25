@@ -27,5 +27,7 @@ public class ChangeTransactionInfoValidator implements MyValidator<ChangeTransIn
             throw new com.project.exceptions.ValidationException("Необходимо ввести id транзакции");
         }
 
+        request.setAttribute("changeTransInfo", changeTransInfoDto);
+
     }
 }

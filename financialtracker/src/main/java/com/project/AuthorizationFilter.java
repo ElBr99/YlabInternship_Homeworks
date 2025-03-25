@@ -1,4 +1,4 @@
-package com.project.controllerServlets.validator;
+package com.project;
 
 import com.project.dtos.EnterUserDto;
 import jakarta.servlet.*;
@@ -23,19 +23,17 @@ public class AuthorizationFilter implements Filter {
 
         if (isPublicPath(uri)) {
             filterChain.doFilter(servletRequest, servletResponse);
-        }
-
-        if (isUserLoggedIn(servletRequest)) {
-            if (isAdminPath(uri)) {
-                if (isUserAdmin(servletRequest)) {
+        } else {
+            if (isUserLoggedIn(servletRequest)) {
+                if (isAdminPath(uri)) {
+                    if (isUserAdmin(servletRequest)) {
+                        filterChain.doFilter(servletRequest, servletResponse);
+                    }
+                    ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN, "Доступ запрещён");
+                } else {
                     filterChain.doFilter(servletRequest, servletResponse);
                 }
-                ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_FORBIDDEN, "Доступ запрещён");
             } else {
-                if (isUserLoggedIn(servletRequest)) {
-                    filterChain.doFilter(servletRequest, servletResponse);
-                }
-
                 ((HttpServletResponse) servletResponse).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Для продолжения нужно авторизоваться");
             }
         }
