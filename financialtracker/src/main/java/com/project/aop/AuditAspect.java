@@ -19,7 +19,7 @@ public class AuditAspect {
     }
 
 
-    @Pointcut("execution(protected * *(..))")
+    @Pointcut("execution(protected * *(..)) && !within(*Test)")
     public void controllerMethods() {
 
     }

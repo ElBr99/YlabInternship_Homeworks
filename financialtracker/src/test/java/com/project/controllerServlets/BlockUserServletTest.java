@@ -9,10 +9,12 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.BeanFactoryProvider;
 import com.project.dtos.ChangeInfoDto;
+import com.project.dtos.EnterUserDto;
 import com.project.model.User;
 import com.project.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +57,11 @@ public class BlockUserServletTest {
         servlet = new BlockUserServlet();
 
         req = mock(HttpServletRequest.class);
+        var session = mock(HttpSession.class);
+        when(session.getAttribute("user"))
+                .thenReturn(new EnterUserDto());
+        when(req.getSession()).thenReturn(session);
+
         resp = mock(HttpServletResponse.class);
         writer = mock(PrintWriter.class);
 

@@ -67,12 +67,7 @@ public class EntranceServlet extends HttpServlet {
         resp.setContentType("application/json");
         resp.setStatus(statusCode);
         resp.setCharacterEncoding("UTF-8");
-
-        try (PrintWriter out = resp.getWriter()) {
-            String jsonResponse = objectMapper.writeValueAsString(responseMap);
-            out.print(jsonResponse);
-            out.flush();
-        }
+        resp.getWriter().write(objectMapper.writeValueAsString(responseMap));
     }
 }
 

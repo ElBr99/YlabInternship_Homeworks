@@ -23,10 +23,9 @@ public class GetFinancialReportServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-            var financialReport = financialService.generateReport();
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(objectMapper.writeValueAsString(financialReport));
+        var financialReport = financialService.generateReport();
+        resp.setContentType("application/json");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write(objectMapper.writeValueAsString(financialReport));
     }
 }
