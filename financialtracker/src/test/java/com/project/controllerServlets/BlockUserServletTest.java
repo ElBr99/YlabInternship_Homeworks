@@ -1,15 +1,13 @@
 package com.project.controllerServlets;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.BeanFactoryProvider;
 import com.project.dtos.ChangeInfoDto;
 import com.project.dtos.EnterUserDto;
+import com.project.exceptions.UserNotFoundException;
 import com.project.model.User;
 import com.project.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +19,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+
 import java.io.PrintWriter;
 import java.util.Optional;
 
@@ -96,7 +96,8 @@ public class BlockUserServletTest {
         String email = "nonexistent@example.com";
 
         when(req.getParameter("email")).thenReturn(email);
-        when(userService.findByEmail(email)).thenReturn(Optional.empty());
+        doThrow(new UserNotFoundException("Такого пользователя нет в системе")).when(userService).blockUser(email);
+
 
         servlet.doPut(req, resp);
 
@@ -113,7 +114,7 @@ public class BlockUserServletTest {
         String email = "user@example.com";
 
         when(req.getParameter("email")).thenReturn(email);
-        when(userService.findByEmail(email)).thenThrow(new RuntimeException("Database Error"));
+        doThrow(new RuntimeException("Database Error")).when(userService).blockUser(email);
 
         servlet.doPut(req, resp);
 

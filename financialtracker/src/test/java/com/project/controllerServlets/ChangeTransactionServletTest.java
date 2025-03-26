@@ -59,8 +59,8 @@ public class ChangeTransactionServletTest {
 
         req = mock(HttpServletRequest.class);
         var session = mock(HttpSession.class);
-        when(session.getAttribute("user"))
-                .thenReturn(new EnterUserDto());
+        when(session.getAttribute("changeTransInfo"))
+                .thenReturn(new ChangeTransInfoDto());
         when(req.getSession()).thenReturn(session);
         resp = mock(HttpServletResponse.class);
         writer = mock(PrintWriter.class);
@@ -72,10 +72,12 @@ public class ChangeTransactionServletTest {
     public void testDoPut_TransactionUpdatedSuccessfully() throws Exception {
         String jsonInput = "{\"sum\": 100, \"description\": \"Transaction description\"}";
         String idParam = "123";
-        ChangeTransInfoDto changeTransInfoDto = new ChangeTransInfoDto();
-        changeTransInfoDto.setSum(BigDecimal.valueOf(100));
-        changeTransInfoDto.setDescription("Transaction description");
+        ChangeTransInfoDto changeTransInfoDto = ChangeTransInfoDto.builder()
+                 .sum(BigDecimal.valueOf(100))
+                 .description("Transaction description")
+                 .build();
 
+        when((req.getAttribute("changeTransInfo"))).thenReturn(changeTransInfoDto);
         when(req.getParameter("id")).thenReturn(idParam);
         when(req.getReader()).thenReturn(new BufferedReader(new StringReader(jsonInput)));
 
@@ -106,7 +108,7 @@ public class ChangeTransactionServletTest {
     @Test
     public void testDoPut_InvalidId() throws Exception {
         String jsonInput = "{\"sum\": 100, \"description\": \"Transaction description\"}";
-        String idParam = "invalid_id"; // некорректный ID
+        String idParam = "invalid_id";
 
         when(req.getParameter("id")).thenReturn(idParam);
         when(req.getReader()).thenReturn(new BufferedReader(new StringReader(jsonInput)));
