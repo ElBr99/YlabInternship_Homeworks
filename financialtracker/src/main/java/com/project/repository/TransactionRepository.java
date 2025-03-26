@@ -21,7 +21,7 @@ public class TransactionRepository {
     private static final String SAVE_SQL = "insert into entities.transactions (user_email,transaction_type, amount, date_time, description, category) values (?, ?, ?,?,?,?) ";
     private static final String UPDATE_SQL = "update entities.transactions set amount=?, description=?, category=?";
     private static final String FIND_BY_ID = "select * from entities.transactions where id = ?";
-    private static final String DELETE_TRANSACTION = "delete * from entities.transactions";
+    private static final String DELETE_TRANSACTION = "delete from entities.transactions where id=?";
     private static final String FIND_INCOME = "select count(amount) as amount from entities.transactions where user_email = ? and transaction_type ='INCOME' ";
     private static final String FIND_EXPENDITURE = "select count(amount) as amount from entities.transactions where user_email = ? and transaction_type ='EXPENDITURE' ";
     private static final String GET_ALL_TRANSACTIONS = "select * from entities.transactions where user_email = ?";
@@ -107,6 +107,7 @@ public class TransactionRepository {
         try {
             connection = ConnectionManager.get();
             try (var preparedStatement = connection.prepareStatement(DELETE_TRANSACTION)) {
+                preparedStatement.setInt(1, id);
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException exception) {
@@ -174,7 +175,7 @@ public class TransactionRepository {
                             .userEmail(resultSet.getString("user_email"))
                             .transactionType(TransactionType.valueOf(resultSet.getString("transaction_type")))
                             .sum(resultSet.getBigDecimal("amount"))
-                            .dateTime(OffsetDateTime.from((resultSet.getTime("date_time")).toLocalTime()))
+                            .dateTime(OffsetDateTime.of((resultSet.getDate("date_time").toLocalDate()).atStartOfDay(), ZoneOffset.UTC))
                             .description(resultSet.getString("description"))
                             .category(resultSet.getString("category"))
                             .build();

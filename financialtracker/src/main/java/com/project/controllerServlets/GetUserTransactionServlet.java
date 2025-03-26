@@ -3,6 +3,7 @@ package com.project.controllerServlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.BeanFactoryProvider;
 import com.project.exceptions.UserNotFoundException;
+import com.project.model.Transaction;
 import com.project.service.TransactionService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NoArgsConstructor;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet("/getUserTransaction")
@@ -27,16 +29,15 @@ public class GetUserTransactionServlet extends HttpServlet {
         String idParam = req.getParameter("email");
 
         try {
-            transactionService.viewTransactionsByUserEmail(idParam);
+            List<Transaction> transactionList = transactionService.viewTransactionsByUserEmail(idParam);
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.setContentType("application/json");
+            resp.getWriter().write(objectMapper.writeValueAsString(transactionList));
         } catch (UserNotFoundException e) {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "User not found")));
-        } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "An unexpected error occurred")));
         }
     }
 }
+
 

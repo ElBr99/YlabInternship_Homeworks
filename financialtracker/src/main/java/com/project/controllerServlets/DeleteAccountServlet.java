@@ -31,6 +31,7 @@ public class DeleteAccountServlet extends HttpServlet {
             userService.deleteAccount(user.getEmail());
             SecurityContext.clearContext();
             resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            resp.getWriter().write(objectMapper.writeValueAsString(Map.of("deleted", "Аккаунт успешно удален")));
         } catch (UserNotFoundException e) {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             resp.getWriter().write(objectMapper.writeValueAsString(Map.of("error", "User not found")));
