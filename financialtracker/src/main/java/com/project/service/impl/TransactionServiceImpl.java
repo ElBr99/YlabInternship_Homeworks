@@ -11,10 +11,12 @@ import com.project.model.Transaction;
 import com.project.repository.TransactionRepository;
 import com.project.service.TransactionService;
 import com.project.utils.SecurityContext;
+import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 

@@ -1,20 +1,20 @@
 package com.project.service.impl;
 
 import com.project.dtos.DatePeriodDto;
-import lombok.RequiredArgsConstructor;
 import com.project.model.FinancialReport;
 import com.project.model.Transaction;
 import com.project.repository.TransactionRepository;
 import com.project.service.FinancialService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.project.utils.SecurityContext.getCurrentUserEmail;
 
+@Service
 @RequiredArgsConstructor
 public class FinancialServiceImpl implements FinancialService {
 

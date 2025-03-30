@@ -4,17 +4,21 @@ import com.project.model.Goal;
 import com.project.model.Role;
 import com.project.model.User;
 import com.project.utils.AbstractIntegrationTest;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.TestConstructor;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RequiredArgsConstructor
+@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class GoalRepositoryImplTest extends AbstractIntegrationTest {
 
-    private final GoalRepository goalRepository = new GoalRepositoryImpl();
-    private final UserRepository userRepository = new UserRepositoryImpl();
+    private final GoalRepository goalRepository;
+    private final UserRepository userRepository;
 
 
     @Test
@@ -51,7 +55,7 @@ class GoalRepositoryImplTest extends AbstractIntegrationTest {
         userRepository.save(testUser);
         String userId = testUser.getEmail();
 
-        Goal initialGoal = createGoal( 5, userId, "goal", BigDecimal.valueOf(100).setScale(2), BigDecimal.valueOf(500).setScale(2));
+        Goal initialGoal = createGoal(5, userId, "goal", BigDecimal.valueOf(100).setScale(2), BigDecimal.valueOf(500).setScale(2));
         goalRepository.createGoal(initialGoal);
         Goal newGoal = createGoal(6, userId, "goal", BigDecimal.valueOf(200).setScale(2), BigDecimal.valueOf(600).setScale(2));
 

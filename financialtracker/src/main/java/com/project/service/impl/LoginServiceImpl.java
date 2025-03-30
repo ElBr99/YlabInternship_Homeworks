@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import com.project.service.LoginService;
 import com.project.service.UserService;
 import com.project.utils.SecurityContext;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 @RequiredArgsConstructor
 public class LoginServiceImpl implements LoginService {
 

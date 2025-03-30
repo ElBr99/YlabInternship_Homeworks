@@ -6,7 +6,6 @@ import com.project.model.User;
 
 @Getter
 @UtilityClass
-
 public class SecurityContext {
 
     private static ThreadLocal<User> currentUser;
@@ -29,7 +28,6 @@ public class SecurityContext {
 
     public static void clearContext() {
         currentUser = null;
-
     }
 
 }

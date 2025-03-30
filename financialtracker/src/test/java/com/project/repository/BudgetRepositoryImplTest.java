@@ -4,7 +4,9 @@ import com.project.model.Budget;
 import com.project.model.Role;
 import com.project.model.User;
 import com.project.utils.AbstractIntegrationTest;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -12,10 +14,13 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 
+@RequiredArgsConstructor
 class BudgetRepositoryImplTest extends AbstractIntegrationTest {
 
-    private final BudgetRepository budgetRepository = new BudgetRepositoryImpl();
-    private final UserRepository userRepository = new UserRepositoryImpl();
+    @Autowired
+    private BudgetRepository budgetRepository;
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Test

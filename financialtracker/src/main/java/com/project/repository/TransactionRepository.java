@@ -3,6 +3,8 @@ package com.project.repository;
 import com.project.model.Transaction;
 import com.project.model.TransactionType;
 import com.project.utils.ConnectionManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -16,8 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
+@RequiredArgsConstructor
 public class TransactionRepository {
 
+    private final ConnectionManager connectionManager;
     private static final String SAVE_SQL = "insert into entities.transactions (user_email,transaction_type, amount, date_time, description, category) values (?, ?, ?,?,?,?) ";
     private static final String UPDATE_SQL = "update entities.transactions set amount=?, description=?, category=?";
     private static final String FIND_BY_ID = "select * from entities.transactions where id = ?";
@@ -33,7 +38,7 @@ public class TransactionRepository {
 
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(SAVE_SQL)) {
                 preparedStatement.setString(1, transaction.getUserEmail());
                 preparedStatement.setString(2, String.valueOf(transaction.getTransactionType()));
@@ -55,7 +60,7 @@ public class TransactionRepository {
     public void update(Transaction transaction) {
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
 
                 preparedStatement.setBigDecimal(1, transaction.getSum());
@@ -75,7 +80,7 @@ public class TransactionRepository {
 
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(FIND_BY_ID)) {
                 preparedStatement.setInt(1, id);
                 var resultSet = preparedStatement.executeQuery();
@@ -105,7 +110,7 @@ public class TransactionRepository {
     public void delete(int id) {
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(DELETE_TRANSACTION)) {
                 preparedStatement.setInt(1, id);
                 preparedStatement.executeUpdate();
@@ -120,7 +125,7 @@ public class TransactionRepository {
         Connection connection = null;
         BigDecimal sum = new BigDecimal(BigInteger.ZERO);
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(FIND_INCOME)) {
                 preparedStatement.setString(1, email);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -141,7 +146,7 @@ public class TransactionRepository {
         Connection connection = null;
         BigDecimal sum = new BigDecimal(BigInteger.ZERO);
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(FIND_EXPENDITURE)) {
                 preparedStatement.setString(1, email);
 
@@ -154,7 +159,7 @@ public class TransactionRepository {
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         } finally {
-            ConnectionManager.release(connection);
+            connectionManager.release(connection);
         }
         return sum;
     }
@@ -164,7 +169,7 @@ public class TransactionRepository {
 
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(GET_ALL_TRANSACTIONS)) {
                 preparedStatement.setString(1, userEmail);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -194,7 +199,7 @@ public class TransactionRepository {
 
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(GET_ALL_EXPENDITURES_TRANSACTIONS)) {
                 preparedStatement.setString(1, email);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -222,7 +227,7 @@ public class TransactionRepository {
     public List<Transaction> findAllIncome(String email) {
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(GET_ALL_INCOME_TRANSACTIONS)) {
                 preparedStatement.setString(1, email);
                 ResultSet resultSet = preparedStatement.executeQuery();
