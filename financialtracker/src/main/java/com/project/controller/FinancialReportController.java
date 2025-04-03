@@ -4,6 +4,7 @@ import com.project.dtos.DatePeriodDto;
 import com.project.model.FinancialReport;
 import com.project.service.FinancialService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('USER')")
 @RequestMapping("api/v1/financial-reports")
 public class FinancialReportController {
 

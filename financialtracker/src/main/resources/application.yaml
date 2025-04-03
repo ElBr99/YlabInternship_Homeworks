@@ -7,3 +7,9 @@ db.pool.size: 10
 db.liquibase.changelog: db/changelogs/changelog-master.yaml
 db.liquibase.defaultSchema: supports
 db.liquibase.mainSchema: entities
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

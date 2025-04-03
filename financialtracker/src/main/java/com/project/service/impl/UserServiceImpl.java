@@ -42,7 +42,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeInfo(ChangeInfoDto changeInfoDto) {
 
-        User currentUser = SecurityContext.getCurrentUserInfo();
+        User currentUser = userRepository.findByEmail(SecurityContext.getCurrentUserEmail())
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
 
         if (changeInfoDto.getName() != null) {
             currentUser.setName(changeInfoDto.getName());
@@ -65,12 +66,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteAccount(String email) {
-        User user;
-        if (userRepository.findByEmail(email).isPresent()) {
-            user = userRepository.findByEmail(email).get();
-        } else {
-            throw new UserNotFoundException("Пользователь не найден");
-        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
+
         userRepository.delete(user);
 
     }

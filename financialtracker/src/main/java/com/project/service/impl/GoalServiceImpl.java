@@ -2,11 +2,11 @@ package com.project.service.impl;
 
 import com.project.dtos.CreateGoalDto;
 import com.project.dtos.UpdateGoalDto;
+import com.project.utils.SecurityContext;
 import lombok.RequiredArgsConstructor;
 import com.project.model.Goal;
 import com.project.repository.GoalRepository;
 import com.project.service.GoalService;
-import com.project.utils.SecurityContext;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

@@ -5,9 +5,9 @@ databaseChangeLog:
       changes:
         - sql: |
             INSERT INTO entities.users (name, email, password, role, blocked) VALUES 
-            ('Admin', 'admin@mail.ru', 'admin', 'ADMIN', false),
-            ('Ivan', 'ivan@mail.ru', 'ivan', 'USER', false),
-            ('Sveta', 'sveta@mail.ru', 'sveta', 'USER', false);
+            ('Admin', 'admin@mail.ru', '{noop}admin', 'ADMIN', false),
+            ('Ivan', 'ivan@mail.ru', '{noop}ivan', 'USER', false),
+            ('Sveta', 'sveta@mail.ru', '{noop}sveta', 'USER', false);
 
   - changeSet:
       id: elbr:1

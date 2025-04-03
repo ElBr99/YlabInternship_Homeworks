@@ -6,6 +6,7 @@ import com.project.exceptions.UserAlreadyExists;
 import com.project.exceptions.UserNotFoundException;
 import com.project.model.Role;
 import com.project.model.User;
+import com.project.utils.SecurityContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.project.repository.UserRepository;
-import com.project.utils.SecurityContext;
 
 import java.util.Optional;
 
@@ -63,7 +63,7 @@ public class UserServiceImplTest {
         User initialUser = createUser("Old Name", userEmail, "oldPassword", Role.USER, false);
 
         try (MockedStatic<SecurityContext> mockedSecurityContext = mockStatic(SecurityContext.class)) {
-            mockedSecurityContext.when(SecurityContext::getCurrentUserInfo).thenReturn(initialUser);
+            mockedSecurityContext.when(SecurityContext::getCurrentUserEmail).thenReturn(initialUser.getEmail());
 
             userService.changeInfo(changeInfoDto);
 
@@ -82,7 +82,7 @@ public class UserServiceImplTest {
         User initialUser = createUser("Old Name", userEmail, "oldPassword", Role.USER, false);
 
         try (MockedStatic<SecurityContext> mockedSecurityContext = mockStatic(SecurityContext.class)) {
-            mockedSecurityContext.when(SecurityContext::getCurrentUserInfo).thenReturn(initialUser);
+            mockedSecurityContext.when(SecurityContext::getCurrentUserEmail).thenReturn(initialUser.getEmail());
 
             userService.changeInfo(changeInfoDto);
 
@@ -101,7 +101,7 @@ public class UserServiceImplTest {
         User initialUser = createUser("Old Name", userEmail, "oldPassword", Role.USER, false);
 
         try (MockedStatic<SecurityContext> mockedSecurityContext = mockStatic(SecurityContext.class)) {
-            mockedSecurityContext.when(SecurityContext::getCurrentUserInfo).thenReturn(initialUser);
+            mockedSecurityContext.when(SecurityContext::getCurrentUserEmail).thenReturn(initialUser.getEmail());
 
             userService.changeInfo(changeInfoDto);
 

@@ -1,7 +1,6 @@
 package com.project.aop;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.project.utils.SecurityContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -10,35 +9,27 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-@Aspect
-@Component
+//@Aspect
+//@Component
 public class AuditAspect {
 
-    private static final AuditAspect aspect = new AuditAspect();
-
-    public static AuditAspect aspectOf() {
-        return aspect;
-    }
-
-
-    @Pointcut("execution(protected * *(..)) && !within(*Test)")
+    @Pointcut("execution(* com.project.controller..*(..))")
     public void controllerMethods() {
 
     }
 
-
-    @After("controllerMethods() && args(request, response)")
-    public void audit(JoinPoint joinPoint, HttpServletRequest request, HttpServletResponse response) {
+    @After("controllerMethods()")
+    public void audit(JoinPoint joinPoint) {
 
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getSignature().getDeclaringTypeName();
 
-        System.out.println("User  " + request.getSession().getAttribute("user") + " executing " + className + "." + methodName);
+        System.out.println("User  " + SecurityContext.getCurrentUserEmail() + " executing " + className + "." + methodName);
     }
 
 
-    @Around("controllerMethods() && args(req, resp)")
-    public Object logExecutionTime(ProceedingJoinPoint joinPoint, HttpServletRequest req, HttpServletResponse resp) throws Throwable {
+    @Around("controllerMethods()")
+    public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
 
         Object result = joinPoint.proceed();

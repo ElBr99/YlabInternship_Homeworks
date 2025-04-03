@@ -1,32 +1,32 @@
 package com.project.service.impl;
 
-import com.project.dtos.EnterUserDto;
-import com.project.exceptions.WrongCredentials;
 import com.project.mapper.UserToEnterUserDtoMapper;
-import lombok.RequiredArgsConstructor;
-import com.project.service.LoginService;
 import com.project.service.UserService;
-import com.project.utils.SecurityContext;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
-public class LoginServiceImpl implements LoginService {
+public class LoginServiceImpl implements UserDetailsService {
 
     private final UserService userService;
-    private final UserToEnterUserDtoMapper userToEnterUserDtoMapper = UserToEnterUserDtoMapper.INSTANCE;
 
     @Override
-    public Optional<EnterUserDto> enter(EnterUserDto enterUserDto) {
-       return Optional.ofNullable(userService.findByEmail(enterUserDto.getEmail())
-               .filter(user -> user.getPassword().equals(enterUserDto.getPassword()))
-               .map(user -> {
-                   EnterUserDto enterUserDto1 = userToEnterUserDtoMapper.userToEnterUserDto(user);
-                   SecurityContext.setCurrentUser(user);
-                   return enterUserDto1;
-               })
-               .orElseThrow(() -> new WrongCredentials("Введены неверные логин и/или пароль")));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var user = userService.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
+        return new User(
+                user.getName(),
+                user.getPassword(),
+                Collections.singleton(new SimpleGrantedAuthority(user.getRole().name()))
+        );
     }
 }
