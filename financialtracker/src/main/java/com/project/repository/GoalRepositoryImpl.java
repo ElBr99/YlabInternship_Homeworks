@@ -2,12 +2,19 @@ package com.project.repository;
 
 import com.project.model.Goal;
 import com.project.utils.ConnectionManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
+@Repository
+@RequiredArgsConstructor
 public class GoalRepositoryImpl implements GoalRepository {
+    
+    private final ConnectionManager connectionManager;
+    
     private static final String CREATE_SQL = "insert into entities.goals (user_email, goal, target_amount, current_amount ) values (?, ?, ?,?)";
     private static final String UPDATE_INFO = "update entities.goals set goal=?, target_amount=?, current_amount=?";
     private static final String GET_BY_USER_EMAIL = "select * from entities.goals where user_email = ? ";
@@ -18,7 +25,7 @@ public class GoalRepositoryImpl implements GoalRepository {
         Connection connection = null;
 
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(CREATE_SQL)) {
                 preparedStatement.setString(1, goal.getUserEmail());
                 preparedStatement.setString(2, goal.getGoal());
@@ -32,7 +39,7 @@ public class GoalRepositoryImpl implements GoalRepository {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         } finally {
-            ConnectionManager.release(connection);
+            connectionManager.release(connection);
         }
     }
 
@@ -40,7 +47,7 @@ public class GoalRepositoryImpl implements GoalRepository {
     public void updateGoal(Goal goal) {
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(UPDATE_INFO)) {
                 preparedStatement.setString(1, goal.getGoal());
                 preparedStatement.setBigDecimal(2, goal.getTarget());
@@ -51,7 +58,7 @@ public class GoalRepositoryImpl implements GoalRepository {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         } finally {
-            ConnectionManager.release(connection);
+            connectionManager.release(connection);
         }
     }
 
@@ -60,7 +67,7 @@ public class GoalRepositoryImpl implements GoalRepository {
     public Optional<Goal> getGoalByUser(String userEmail) {
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(GET_BY_USER_EMAIL)) {
                 preparedStatement.setString(1, userEmail);
                 var resultSet = preparedStatement.executeQuery();
@@ -83,7 +90,7 @@ public class GoalRepositoryImpl implements GoalRepository {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         } finally {
-            ConnectionManager.release(connection);
+            connectionManager.release(connection);
         }
     }
 }

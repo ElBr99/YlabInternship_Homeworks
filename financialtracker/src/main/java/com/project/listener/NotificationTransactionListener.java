@@ -5,9 +5,11 @@ import com.project.model.Transaction;
 import com.project.service.BudgetService;
 import com.project.service.FinancialService;
 import com.project.service.NotificationService;
+import org.springframework.stereotype.Service;
 
 import static com.project.utils.SecurityContext.getCurrentUserEmail;
 
+@Service
 @RequiredArgsConstructor
 public class NotificationTransactionListener implements CreateTransactionListener {
 

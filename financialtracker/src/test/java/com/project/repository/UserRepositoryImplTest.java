@@ -3,15 +3,17 @@ package com.project.repository;
 import com.project.model.Role;
 import com.project.model.User;
 import com.project.utils.AbstractIntegrationTest;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RequiredArgsConstructor
 public class UserRepositoryImplTest extends AbstractIntegrationTest {
 
-    private final UserRepositoryImpl userRepository = new UserRepositoryImpl();
+    private final UserRepositoryImpl userRepository;
 
 
     @Test
@@ -94,7 +96,7 @@ public class UserRepositoryImplTest extends AbstractIntegrationTest {
         User nonExistingUser = createUser("Non Existent", "nonexistent@example.com", "password", Role.USER, false);
 
         userRepository.delete(nonExistingUser);
-        assertDoesNotThrow(() -> userRepository.delete(nonExistingUser) );
+        assertDoesNotThrow(() -> userRepository.delete(nonExistingUser));
     }
 
     private User createUser(String name, String email, String password, Role role, boolean blocked) {

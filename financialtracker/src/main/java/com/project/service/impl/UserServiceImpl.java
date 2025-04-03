@@ -10,9 +10,11 @@ import com.project.repository.UserRepository;
 import com.project.service.UserService;
 import com.project.utils.SecurityContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -40,7 +42,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeInfo(ChangeInfoDto changeInfoDto) {
 
-        User currentUser = SecurityContext.getCurrentUserInfo();
+        User currentUser = userRepository.findByEmail(SecurityContext.getCurrentUserEmail())
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
 
         if (changeInfoDto.getName() != null) {
             currentUser.setName(changeInfoDto.getName());
@@ -63,19 +66,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteAccount(String email) {
-        User user;
-        if (userRepository.findByEmail(email).isPresent()) {
-            user = userRepository.findByEmail(email).get();
-        } else {
-            throw new UserNotFoundException("Пользователь не найден");
-        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
+
         userRepository.delete(user);
 
     }
 
     @Override
-    public void blockUser(String email) {
-        User user = findByEmail(email)
+    public void blockUser() {
+        User user = findByEmail(SecurityContext.getCurrentUserEmail())
                 .orElseThrow(() -> new UserNotFoundException("Такого пользователя нет в системе"));
 
         user.setBlocked(true);

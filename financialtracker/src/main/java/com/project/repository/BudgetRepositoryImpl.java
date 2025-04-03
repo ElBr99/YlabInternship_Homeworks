@@ -2,15 +2,19 @@ package com.project.repository;
 
 import com.project.model.Budget;
 import com.project.utils.ConnectionManager;
-
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
+@Repository
+@RequiredArgsConstructor
 public class BudgetRepositoryImpl implements BudgetRepository {
 
+    private final ConnectionManager connectionManager;
     private static final String CREATE_SQL = "insert into entities.budgets (user_email,amount ) values (?, ?)";
     private static final String GET_BY_USER_EMAIL = "select amount from entities.budgets where user_email = ? ";
 
@@ -21,7 +25,7 @@ public class BudgetRepositoryImpl implements BudgetRepository {
         Connection connection = null;
 
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(GET_BY_USER_EMAIL)) {
                 preparedStatement.setString(1, userEmail);
                 var resultSet = preparedStatement.executeQuery();
@@ -34,7 +38,7 @@ public class BudgetRepositoryImpl implements BudgetRepository {
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         } finally {
-            ConnectionManager.release(connection);
+            connectionManager.release(connection);
         }
     }
 
@@ -44,7 +48,7 @@ public class BudgetRepositoryImpl implements BudgetRepository {
         Connection connection = null;
 
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(CREATE_SQL)) {
 
                 preparedStatement.setString(1, budget.getUserEmail());
@@ -55,7 +59,7 @@ public class BudgetRepositoryImpl implements BudgetRepository {
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         } finally {
-            ConnectionManager.release(connection);
+            connectionManager.release(connection);
         }
     }
 }

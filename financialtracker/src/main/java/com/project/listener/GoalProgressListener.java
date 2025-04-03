@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import com.project.model.Transaction;
 import com.project.model.TransactionType;
 import com.project.service.GoalService;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Service
 @RequiredArgsConstructor
 public class GoalProgressListener implements CreateTransactionListener, DeleteTransactionListener {
 

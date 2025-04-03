@@ -16,5 +16,4 @@ public class ChangeInfoDto {
     private String password;
     private Boolean block;
 
-
 }

@@ -6,15 +6,17 @@ import com.project.dtos.FilterTransactionsDto;
 import com.project.exceptions.TransactionNotFoundException;
 import com.project.listener.CreateTransactionListener;
 import com.project.listener.DeleteTransactionListener;
+import com.project.utils.SecurityContext;
 import lombok.RequiredArgsConstructor;
 import com.project.model.Transaction;
 import com.project.repository.TransactionRepository;
 import com.project.service.TransactionService;
-import com.project.utils.SecurityContext;
+import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 

@@ -1,7 +1,7 @@
 package com.project.listener;
 
-import com.project.listener.NotificationTransactionListener;
 import com.project.model.Transaction;
+import com.project.utils.SecurityContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.project.service.BudgetService;
 import com.project.service.FinancialService;
 import com.project.service.NotificationService;
-import com.project.utils.SecurityContext;
 
 import java.math.BigDecimal;
 import java.util.Optional;

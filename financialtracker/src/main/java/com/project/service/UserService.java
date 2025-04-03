@@ -14,7 +14,7 @@ public interface UserService {
 
     void deleteAccount(String email);
 
-    void blockUser (String email);
+    void blockUser();
 
     Optional<User> findByEmail(String email);
 

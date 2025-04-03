@@ -3,13 +3,18 @@ package com.project.repository;
 import com.project.model.Role;
 import com.project.model.User;
 import com.project.utils.ConnectionManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Optional;
 
+@Repository
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
+    private final ConnectionManager connectionManager;
 
     private static final String SAVE_SQL = " insert into entities.users (name, email, password, role,blocked) values (?, ?, ?,?,?) ";
     private static final String FIND_BY_EMAIL_SQL = "select * from entities.users where email = ? ";
@@ -20,7 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void save(User user) {
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(SAVE_SQL)) {
                 preparedStatement.setString(1, user.getName());
                 preparedStatement.setString(2, user.getEmail());
@@ -33,14 +38,14 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         } finally {
-            ConnectionManager.release(connection);
+            connectionManager.release(connection);
         }
     }
 
     public Optional<User> findByEmail(String email) {
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(FIND_BY_EMAIL_SQL)) {
                 preparedStatement.setString(1, email);
                 var resultSet = preparedStatement.executeQuery();
@@ -59,14 +64,14 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         } finally {
-            ConnectionManager.release(connection);
+            connectionManager.release(connection);
         }
     }
 
     public void update(User user) {
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(UPDATE_INFO)) {
                 preparedStatement.setString(1, user.getName());
                 preparedStatement.setString(2, user.getPassword());
@@ -78,14 +83,14 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         } finally {
-            ConnectionManager.release(connection);
+            connectionManager.release(connection);
         }
     }
 
     public void delete(User user) {
         Connection connection = null;
         try {
-            connection = ConnectionManager.get();
+            connection = connectionManager.get();
             try (var preparedStatement = connection.prepareStatement(DELETE_USER)) {
                 preparedStatement.setString(1, user.getEmail());
                 preparedStatement.executeUpdate();
@@ -93,7 +98,7 @@ public class UserRepositoryImpl implements UserRepository {
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         } finally {
-            ConnectionManager.release(connection);
+            connectionManager.release(connection);
         }
     }
 }
