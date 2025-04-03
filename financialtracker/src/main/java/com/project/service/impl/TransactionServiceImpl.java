@@ -3,7 +3,7 @@ package com.project.service.impl;
 import com.project.dtos.ChangeTransInfoDto;
 import com.project.dtos.CreateTransactionDto;
 import com.project.dtos.FilterTransactionsDto;
-import com.project.exceptions.TransactionNotFound;
+import com.project.exceptions.TransactionNotFoundException;
 import com.project.listener.CreateTransactionListener;
 import com.project.listener.DeleteTransactionListener;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +42,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void changeTransactionInfo(int id, ChangeTransInfoDto changeTransInfoDto) {
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFound("Такой транзакции не найдено"));
+                .orElseThrow(() -> new TransactionNotFoundException("Такой транзакции не найдено"));
 
         if (changeTransInfoDto.getSum() != null) {
             transaction.setSum(changeTransInfoDto.getSum());
@@ -62,7 +62,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void deleteTransaction(int id) {
         Transaction transaction = transactionRepository.findById(id)
-                .orElseThrow(() -> new TransactionNotFound("Такой транзакции не найдено"));
+                .orElseThrow(() -> new TransactionNotFoundException("Такой транзакции не найдено"));
 
         transactionRepository.delete(id);
         deleteTransactionListeners.forEach(listener -> listener.onDelete(transaction));

@@ -13,7 +13,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     private static final String SAVE_SQL = " insert into entities.users (name, email, password, role,blocked) values (?, ?, ?,?,?) ";
     private static final String FIND_BY_EMAIL_SQL = "select * from entities.users where email = ? ";
-    private static final String UPDATE_INFO = "update entities.users set name=?, email=?, password=?, blocked=? where email =? ";
+    private static final String UPDATE_INFO = "update entities.users set name=?, password=?, blocked=? where email=?";
     private static final String DELETE_USER = "delete from entities.users where email = ?";
 
 
@@ -69,10 +69,9 @@ public class UserRepositoryImpl implements UserRepository {
             connection = ConnectionManager.get();
             try (var preparedStatement = connection.prepareStatement(UPDATE_INFO)) {
                 preparedStatement.setString(1, user.getName());
-                preparedStatement.setString(2, user.getEmail());
-                preparedStatement.setString(3, user.getPassword());
-                preparedStatement.setBoolean(4, user.getBlocked());
-                preparedStatement.setString(5, user.getEmail());
+                preparedStatement.setString(2, user.getPassword());
+                preparedStatement.setBoolean(3, user.getBlocked());
+                preparedStatement.setString(4, user.getEmail());
 
                 preparedStatement.executeUpdate();
             }

@@ -61,9 +61,6 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_user_email
-                    references: users(email)
-                    onDelete: cascade
               - column:
                   name: transaction_type
                   type: varchar(255)
@@ -87,6 +84,13 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: transactions
+            baseColumnNames: user_email
+            referencedTableName: users
+            referencedColumnNames: email
+            constraintName: fk_user_email
+            onDelete: CASCADE
 
   - changeSet:
       id: elbr:3
@@ -107,9 +111,6 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_user_email
-                    references: users(email)
-                    onDelete: cascade
               - column:
                   name: goal
                   type: varchar(255)
@@ -121,6 +122,13 @@ databaseChangeLog:
               - column:
                   name: current_amount
                   type: numeric(15, 2)
+        - addForeignKeyConstraint:
+            baseTableName: goals
+            baseColumnNames: user_email
+            referencedTableName: users
+            referencedColumnNames: email
+            constraintName: fk_user_email
+            onDelete: CASCADE
 
   - changeSet:
       id: elbr:4
@@ -141,9 +149,13 @@ databaseChangeLog:
                   type: varchar(255)
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_user_email
-                    references: users(email)
-                    onDelete: cascade
               - column:
                   name: amount
                   type: numeric(15, 2)
+        - addForeignKeyConstraint:
+            baseTableName: budgets
+            baseColumnNames: user_email
+            referencedTableName: users
+            referencedColumnNames: email
+            constraintName: fk_user_email
+            onDelete: CASCADE

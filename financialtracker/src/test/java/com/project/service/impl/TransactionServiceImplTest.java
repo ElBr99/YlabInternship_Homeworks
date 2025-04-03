@@ -3,7 +3,7 @@ package com.project.service.impl;
 import com.project.dtos.ChangeTransInfoDto;
 import com.project.dtos.CreateTransactionDto;
 import com.project.dtos.FilterTransactionsDto;
-import com.project.exceptions.TransactionNotFound;
+import com.project.exceptions.TransactionNotFoundException;
 import com.project.listener.CreateTransactionListener;
 import com.project.listener.DeleteTransactionListener;
 import com.project.model.Transaction;
@@ -83,7 +83,7 @@ public class TransactionServiceImplTest {
         ChangeTransInfoDto changeTransInfoDto = createChangeTransInfoDto(BigDecimal.valueOf(200), "NewCategory", "NewDescription");
         when(transactionRepository.findById(transactionId)).thenReturn(Optional.empty());
 
-        assertThrows(TransactionNotFound.class, () -> transactionService.changeTransactionInfo(transactionId, changeTransInfoDto));
+        assertThrows(TransactionNotFoundException.class, () -> transactionService.changeTransactionInfo(transactionId, changeTransInfoDto));
         verify(transactionRepository, never()).update(any());
     }
 
@@ -104,7 +104,7 @@ public class TransactionServiceImplTest {
         int transactionId = new Random().nextInt(10) + 1;
         when(transactionRepository.findById(transactionId)).thenReturn(Optional.empty());
 
-        assertThrows(TransactionNotFound.class, () -> transactionService.deleteTransaction(transactionId));
+        assertThrows(TransactionNotFoundException.class, () -> transactionService.deleteTransaction(transactionId));
         verify(transactionRepository, never()).delete(transactionId);
 
         verify(deleteTransactionListeners, never()).forEach(any());

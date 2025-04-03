@@ -3,13 +3,13 @@ package com.project.service.impl;
 import com.project.dtos.ChangeInfoDto;
 import com.project.dtos.CreateUserDto;
 import com.project.exceptions.UserAlreadyExists;
-import com.project.exceptions.UserNotFound;
-import lombok.RequiredArgsConstructor;
+import com.project.exceptions.UserNotFoundException;
 import com.project.model.Role;
 import com.project.model.User;
 import com.project.repository.UserRepository;
 import com.project.service.UserService;
 import com.project.utils.SecurityContext;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
@@ -31,12 +31,15 @@ public class UserServiceImpl implements UserService {
         user.setRole(Role.USER);
         user.setBlocked(false);
 
+        //маппер мапстракт
+
         userRepository.save(user);
     }
 
 
     @Override
     public void changeInfo(ChangeInfoDto changeInfoDto) {
+
         User currentUser = SecurityContext.getCurrentUserInfo();
 
         if (changeInfoDto.getName() != null) {
@@ -64,11 +67,23 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByEmail(email).isPresent()) {
             user = userRepository.findByEmail(email).get();
         } else {
-            throw new UserNotFound("Пользователь не найден");
+            throw new UserNotFoundException("Пользователь не найден");
         }
         userRepository.delete(user);
 
     }
+
+    @Override
+    public void blockUser(String email) {
+        User user = findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Такого пользователя нет в системе"));
+
+        user.setBlocked(true);
+
+        userRepository.update(user);
+
+    }
+
 
     @Override
     public Optional<User> findByEmail(String email) {
